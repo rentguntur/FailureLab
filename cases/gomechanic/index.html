@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Failure Lab — Case #004: GoMechanic</title>
+<style>
+:root{--paper:#f7f4ee;--ink:#171717;--muted:#655f58;--line:#d8d0c4;--accent:#b9412b;--card:#fffdf8;--soft:#eee8de;--green:#356b4d;--warn:#8b5a18}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.65}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:5;background:rgba(247,244,238,.96);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900;font-size:20px;letter-spacing:-1px}.brand span{color:var(--accent)}
+.back{font-size:14px;color:var(--muted);text-decoration:none}
+.wrap{max-width:1120px;margin:auto;padding:0 24px}
+.hero{padding:72px 0 48px}
+.kicker{font-size:13px;font-weight:800;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(44px,7vw,82px);line-height:.96;letter-spacing:-4px;margin:12px 0 20px;max-width:850px}
+.deck{font-size:21px;line-height:1.45;max-width:780px;color:#4f4a45}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.pill{border:1px solid var(--line);padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700;background:var(--card)}
+.section{padding:54px 0;border-top:1px solid var(--line)}
+.num{font-size:12px;color:var(--accent);font-weight:800;letter-spacing:1.5px}
+h2{font-size:42px;letter-spacing:-2px;line-height:1.05;margin:8px 0 18px}
+h3{font-size:22px;margin:0 0 8px}
+.lead{font-size:19px;color:#514c46;max-width:820px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.card p{margin:7px 0;color:#504b45}
+.stat{font-size:34px;font-weight:900;letter-spacing:-1px}
+.note{background:#efe9df;border-left:4px solid var(--accent);padding:18px 20px;border-radius:10px;margin:20px 0}
+.quote{font-size:26px;line-height:1.25;font-weight:800;max-width:800px}
+.flow{display:flex;align-items:stretch;gap:10px;overflow-x:auto;padding:10px 0 18px}
+.flow .box{min-width:165px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;font-weight:800}
+.flow .arr{align-self:center;font-size:25px;color:var(--accent);font-weight:900}
+.trap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.trap .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;font-weight:800}
+.trap .step strong{display:block;font-size:13px;color:var(--accent);margin-bottom:5px}
+.chain{display:grid;gap:0;max-width:900px;margin:auto}
+.chainitem{background:var(--card);border:1px solid var(--line);padding:17px 20px;border-radius:14px;font-weight:800}
+.chainarrow{text-align:center;color:var(--accent);font-size:24px;font-weight:900;height:28px}
+.timeline{border-left:3px solid var(--line);padding-left:24px}
+.titem{position:relative;margin:0 0 26px}
+.titem:before{content:"";position:absolute;left:-32px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.year{font-weight:900;color:var(--accent);font-size:13px;letter-spacing:1px}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+figure img{display:block;width:100%;height:290px;object-fit:cover}
+figcaption{padding:13px 15px;font-size:12px;color:var(--muted)}
+figcaption a{color:var(--accent)}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{text-align:left;padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.checks{display:grid;gap:10px}
+.check{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+.check b{display:block}
+.footer{padding:60px 0 90px;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+@media(max-width:800px){.grid2,.grid3,.gallery{grid-template-columns:1fr}.trap{grid-template-columns:1fr 1fr}h1{letter-spacing:-2px}.hero{padding-top:48px}.top{padding:14px 18px}.wrap{padding:0 18px}}
+@media(max-width:520px){.trap{grid-template-columns:1fr}.flow .box{min-width:145px}h2{font-size:34px}}
+
+.debtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.source-list{display:grid;gap:10px}.source-list a{text-decoration:none;border-bottom:1px solid var(--line);padding:10px 0}.source-list a:hover{color:var(--accent)}.signal{display:grid;grid-template-columns:1.1fr 1.4fr 1.4fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:18px 0}.signal>div{padding:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}.signal .head{font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:1px;background:var(--soft)}@media(max-width:760px){.debtgrid{grid-template-columns:1fr}.signal{grid-template-columns:1fr}.signal>div{border-right:0}.gallery{grid-template-columns:1fr}.grid2,.grid3{grid-template-columns:1fr}}
+.gm-alert{border-left:5px solid #b42318;background:#fff4f2;padding:18px 20px;border-radius:12px;margin:20px 0}.gm-ok{border-left:5px solid #16704a;background:#f2faf6;padding:18px 20px;border-radius:12px;margin:20px 0}.gm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gm-card{border:1px solid #ddd;padding:16px;border-radius:12px;background:#fff}.gm-flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.gm-flow span{border:1px solid #cfcfcf;padding:10px 12px;border-radius:10px;background:#fafafa}.gm-arrow{font-weight:700}.gm-small{font-size:.9rem;color:#666}.gm-table{width:100%;border-collapse:collapse}.gm-table th,.gm-table td{border-bottom:1px solid #ddd;text-align:left;padding:10px 8px;vertical-align:top}.gm-table th{background:#f7f7f7}.sources a{overflow-wrap:anywhere}@media(max-width:760px){.gm-grid{grid-template-columns:1fr}.gm-flow{display:block}.gm-flow span{display:inline-block;margin:4px 0}.gm-arrow{display:block;margin:3px 0}}
+/* Header + hero (matches other cases) */
+.container{max-width:1120px;margin:auto;padding:0 24px}
+header.hero{padding:56px 24px 40px;max-width:1120px;margin:auto}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+header.hero h1{font-size:clamp(32px,5.5vw,54px);line-height:1.05;letter-spacing:-2px;margin:12px 0 16px;max-width:850px}
+.dek{font-size:19px;line-height:1.45;max-width:800px;color:#4f4a45}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.meta span{border:1px solid var(--line);padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700;background:var(--card)}
+main.container section{padding:40px 0;border-top:1px solid var(--line)}
+main.container h2{font-size:30px;letter-spacing:-1px;line-height:1.1;margin:0 0 16px}
+/* Diagram / tree (failure-chain visuals) */
+.diagram{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:20px 0}
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;margin:24px 0;text-align:center}
+.tree .root{background:var(--ink);color:#fffdf8;padding:14px 20px;border-radius:14px;font-weight:800}
+.tree .node{background:var(--card);border:1px solid var(--line);padding:14px 18px;border-radius:12px;font-weight:700;max-width:520px}
+.tree .branch{color:var(--accent);font-size:20px;font-weight:900;margin:2px 0}
+.tree .split{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;margin:12px 0;text-align:left}
+.tree .split>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+@media(max-width:760px){.tree .split{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top"><div class="brand">Failure<span>Lab</span></div><a class="back" href="../../index.html">← Case library</a></div>
+<header class="hero">
+<div class="eyebrow">FAILURE LAB · CASE #004</div>
+<h1>GoMechanic: When the numbers stopped being trustworthy</h1>
+<p class="dek">A promising auto-service marketplace did not simply run out of money. Its reported growth became unreliable, investor trust broke, funding disappeared, and the business had to be sold in distress.</p>
+<div class="meta"><span>2016–2023 crisis</span><span>Governance · reporting integrity · growth pressure</span><span>Post-crisis revival under new ownership</span></div>
+</header>
+<main class="container">
+<section>
+<h2>01 · The business before the failure</h2>
+<p>GoMechanic was built around a simple customer problem: authorised service centres could be expensive and local garages could be inconsistent. The company used technology to connect customers with partner workshops, standardise the experience, arrange pickup and delivery, and sell servicing and related products.</p>
+<div class="gm-grid">
+<div class="gm-card"><strong>Customer</strong><br/>Car owner wanting predictable service, price and convenience.</div>
+<div class="gm-card"><strong>Supply</strong><br/>Partner workshops performing the physical work.</div>
+<div class="gm-card"><strong>Platform</strong><br/>Bookings, pricing, service coordination, parts and quality controls.</div>
+</div>
+<p class="gm-small">The model itself was not obviously absurd. In 2022, an HDFC Securities industry note described roughly 1,100 workshops, about 85,000 vehicles per month and a ~19–20% take rate. These were company-represented metrics, not independently audited conclusions. (HDFC Securities, 2022)</p>
+</section>
+<section>
+<h2>02 · What it looked like from the outside</h2>
+<div class="gallery">
+<figure><img alt="GoMechanic founders and team at a company event" src="https://images.financialexpressdigital.com/2019/10/go-mechanic-1.jpg?quality=100"/><figcaption>GoMechanic team during its growth phase. Source: Financial Express. </figcaption></figure>
+<figure><img alt="GoMechanic workshop entrance" src="https://gomechanic.in/blog/wp-content/uploads/2022/11/Gomechanic-Modern-car-wash-and-spa-1000x475.jpg"/><figcaption>A GoMechanic-branded workshop. Source: GoMechanic. </figcaption></figure>
+<figure><img alt="GoMechanic workshop in Mumbai" src="https://gomechanic.in/blog/wp-content/uploads/2022/10/WhatsApp-Image-2022-10-13-at-11.58.34-AM-1000x450.jpeg"/><figcaption>Partner workshop in Mumbai. Source: GoMechanic. </figcaption></figure>
+<figure><img alt="GoMechanic logo" src="https://yt3.ggpht.com/ytc/AKedOLQiFwQVlRimY1UKM5X4FS8XZTGK_rpuvf9zP8tc=s900-c-k-c0x00ffffff-no-rj"/><figcaption>GoMechanic brand mark. Source: Inventiva image listing. </figcaption></figure>
+</div>
+</section>
+<section>
+<h2>03 · Business Model Flow</h2>
+<div class="diagram gm-flow">
+<span>Customer books service</span><b class="gm-arrow">→</b><span>GoMechanic routes job</span><b class="gm-arrow">→</b><span>Partner garage performs work</span><b class="gm-arrow">→</b><span>GoMechanic earns take-rate / service revenue</span><b class="gm-arrow">→</b><span>Repeat customer + more workshops</span>
+</div>
+<p>The key control problem was hidden inside this apparently simple flow: <strong>the company had to know whether the workshops, transactions and revenue it reported actually existed and were recorded correctly.</strong></p>
+</section>
+<section>
+<h2>04 · Why the company looked investable</h2>
+<ul><li>Large, fragmented offline car-servicing market.</li><li>Clear consumer pain around price, transparency and convenience.</li><li>Technology could coordinate a fragmented workshop network.</li><li>Strong venture backing and rapid network expansion created visible scale.</li><li>By 2021 it had raised a $42 million Series C led by Tiger Global with existing investors participating. (Moneycontrol, 2021)</li></ul>
+<div class="gm-alert"><strong>The dangerous transition:</strong> once a company is judged heavily on growth metrics, the pressure changes from “build a good business” to “show that the business is growing fast enough to justify the next round.” That does not prove misconduct by itself. In GoMechanic's case, later investor findings and the founders' own admission show that this pressure became connected to financial-reporting failures. (TechCrunch; Moneycontrol, 2023)</div>
+</section>
+<section>
+<h2>05 · Timeline: from traction to trust failure</h2>
+<div class="timeline">
+<div><strong>2016</strong><p>GoMechanic founded by Amit Bhasin, Kushal Karwa, Rishabh Karwa and Nitin Rana. (Forbes India, 2020)</p></div>
+<div><strong>2016–19</strong><p>Network expands across Indian cities; the company positions itself around technology-enabled, standardised car servicing. (New Indian Express; Financial Express)</p></div>
+<div><strong>2021</strong><p>$42M Series C led by Tiger Global; valuation and network scale rise sharply. (Moneycontrol, 2021)</p></div>
+<div><strong>2022</strong><p>Prospective funding discussions reach due diligence. Sources later report discrepancies in the numbers and workshop network. </p></div>
+<div><strong>Jan 2023</strong><p>Founder Amit Bhasin publicly acknowledges “grave errors” in financial reporting; investors say founders knowingly misstated facts including revenue inflation. About 70% of staff are laid off. (TechCrunch; Moneycontrol, 2023)</p></div>
+<div><strong>Mar 2023</strong><p>The business is sold in distress to a consortium led by Lifelong Group's Servizzy. Reported valuation falls dramatically from its previous funding levels. (TechCrunch; Business Standard, 2023)</p></div>
+<div><strong>Oct 2023</strong><p>Delhi Police EOW registers an FIR naming the original founders and other officials over allegations including cheating, forgery and falsification of accounts. These are allegations under investigation, not a court finding. (Indian Express, 2023)</p></div>
+<div><strong>2024</strong><p>Under new management, GoMechanic reports ₹210 Cr FY24 revenue and says it became EBITDA-positive in Q1 FY25. It is therefore better described as a rescued/restructured business than a company that simply disappeared. (Business Standard/PTI, 2024)</p></div>
+</div>
+</section>
+<section>
+<h2>06 · The financial picture — and the problem with trusting the picture</h2>
+<table class="gm-table"><thead><tr><th>Reported metric</th><th>What was reported</th><th>Why it matters</th></tr></thead><tbody>
+<tr><td>FY21 revenue</td><td>₹47.2 Cr</td><td>Growth baseline reported before the crisis.</td></tr>
+<tr><td>FY22 revenue</td><td>₹96.8 Cr</td><td>More than doubled on reported numbers.</td></tr>
+<tr><td>FY22 loss</td><td>₹114.3 Cr</td><td>Losses also rose sharply.</td></tr>
+<tr><td>Series C</td><td>$42M in 2021</td><td>Capital and investor confidence increased the capacity to scale.</td></tr>
+</tbody></table>
+<p class="gm-small">FY21/FY22 figures were reported in contemporaneous coverage; later disclosures alleged that financial reporting contained serious inaccuracies, so these historical numbers should not be treated as clean, independently validated operating truth. </p>
+</section>
+<section>
+<h2>07 · The GoMechanic Trap</h2>
+<div class="diagram gm-flow">
+<span>Real customer problem</span><b class="gm-arrow">→</b><span>Early traction</span><b class="gm-arrow">→</b><span>VC growth expectations</span><b class="gm-arrow">→</b><span>More reported scale</span><b class="gm-arrow">→</b><span>Pressure to sustain the story</span><b class="gm-arrow">→</b><span>Financial reporting becomes unreliable</span><b class="gm-arrow">→</b><span>Due diligence exposes mismatch</span><b class="gm-arrow">→</b><span>Funding stops</span><b class="gm-arrow">→</b><span>Cash crisis + layoffs + distress sale</span>
+</div>
+<div class="gm-alert"><strong>Important:</strong> the failure mechanism is not “VC funding caused fraud.” The evidence supports a narrower conclusion: the company was pursuing growth, the founders acknowledged serious reporting errors, investors discovered discrepancies during diligence, and the funding process then collapsed. The exact internal sequence and motives beyond those facts should not be presented as proven. (TechCrunch; Moneycontrol, 2023)</div>
+</section>
+<section>
+<h2>08 · Failure Chain: the moment information became the risk</h2>
+<div class="tree"><div class="root">Growth story</div><div class="branch">↓</div><div class="node">Reported revenue / network scale become critical to valuation and fundraising</div><div class="branch">↓</div><div class="node">Controls fail to provide reliable independent verification</div><div class="branch">↓</div><div class="node">Financial reporting is materially misstated, according to founders/investors</div><div class="branch">↓</div><div class="node">Due diligence challenges the numbers</div><div class="branch">↓</div><div class="node">New funding does not close</div><div class="branch">↓</div><div class="node">Liquidity crisis arrives before a credible repair plan</div><div class="branch">↓</div><div class="root">Distress sale</div></div>
+</section>
+<section>
+<h2>09 · The smallest useful control unit</h2>
+<p>For this case, “revenue” was too high-level a number. A better control unit was the <strong>verified workshop transaction</strong>.</p>
+<div class="gm-grid">
+<div class="gm-card"><strong>Workshop exists?</strong><br/>Physical verification, ownership/partner agreement, service capacity.</div>
+<div class="gm-card"><strong>Job exists?</strong><br/>Customer booking → work order → invoice → payment trail.</div>
+<div class="gm-card"><strong>Money exists?</strong><br/>Bank settlement reconciles to the reported transaction.</div>
+</div>
+<p><strong>Control principle:</strong> if management reports 100,000 jobs, an independent process should be able to sample those jobs and trace them back to real customers, real workshops and real cash.</p>
+</section>
+<section>
+<h2>10 · Warning signals that could have been caught earlier</h2>
+<table class="gm-table"><thead><tr><th>Signal</th><th>What to test</th><th>Action</th></tr></thead><tbody>
+<tr><td>Growth far ahead of cash generation</td><td>Reconcile reported growth with bank inflows and contribution economics.</td><td>Freeze expansion until the reconciliation passes.</td></tr>
+<tr><td>Very large partner network</td><td>Randomly verify workshops and active jobs.</td><td>Independent monthly network audit.</td></tr>
+<tr><td>Founder-controlled reporting</td><td>Separate operating MIS from finance verification.</td><td>Finance owner reports directly to board/audit committee.</td></tr>
+<tr><td>Fundraising depends on one headline metric</td><td>Challenge revenue quality, not only revenue growth.</td><td>Require evidence pack behind every KPI.</td></tr>
+<tr><td>Numbers change materially during diligence</td><td>Compare investor deck, MIS, GST/invoices, bank statements and contracts.</td><td>Pause transaction until differences are explained.</td></tr>
+<tr><td>Related-party or unusual workshop economics</td><td>Look for concentration and transactions that do not behave like normal partners.</td><td>Independent review before new capital.</td></tr>
+</tbody></table>
+</section>
+<section>
+<h2>11 · Early-Warning Loop</h2>
+<div class="diagram gm-flow"><span>Reported KPI</span><b>→</b><span>Independent sample</span><b>→</b><span>Source-document reconciliation</span><b>→</b><span>Variance threshold</span><b>→</b><span>Owner investigates</span><b>→</b><span>Board decision</span><b>↺</b></div>
+<p>This is the key lesson: <strong>trust is not a substitute for controls.</strong> A fast-growing company does not need bureaucracy everywhere. It needs hard controls around the numbers that determine valuation, financing and survival.</p>
+</section>
+<section>
+<h2>12 · Who should have acted?</h2>
+<div class="gm-grid">
+<div class="gm-card"><strong>Founders</strong><br/>Stop the moment reported numbers cannot be defended. Correct the record before raising more money.</div>
+<div class="gm-card"><strong>Board / investors</strong><br/>Independently test the KPIs that drive the next financing round.</div>
+<div class="gm-card"><strong>Finance / audit</strong><br/>Build transaction-level reconciliation instead of accepting management dashboards at face value.</div>
+</div>
+</section>
+<section>
+<h2>13 · Could GoMechanic have been saved?</h2>
+<p><strong>Possibly as a business, but not by simply raising another round.</strong></p>
+<p>Once investor confidence in the reported numbers broke, the company needed truth before growth: independent verification, a realistic cash plan, management changes where necessary, and a smaller operating footprint. The eventual distressed acquisition shows that the underlying service business had enough value to be continued, while the original capital story did not survive. The new owners later reported operational profitability, which is evidence that the operating business and the original governance failure should be analysed separately. </p>
+<div class="gm-ok"><strong>Counterfactual:</strong> If the same reporting problems had been discovered 12–18 months earlier, the company may have had more options: reset the valuation, shrink the footprint, replace weak controls, and raise a smaller rescue round. This is Failure Lab analysis, not a verified historical outcome.</div>
+</section>
+<section>
+<h2>14 · What happened to stakeholders?</h2>
+<ul><li><strong>Employees:</strong> roughly 70% workforce reduction during the January 2023 restructuring. </li><li><strong>Investors:</strong> faced a major impairment as the company moved from a high private valuation to a distressed sale. (Business Standard, 2023)</li><li><strong>Customers:</strong> experienced disruption during the crisis and restructuring.</li><li><strong>Workshops:</strong> partner relationships and trust became operational risks.</li><li><strong>New owner:</strong> acquired the brand/business and attempted to rebuild it with different controls and management. (Moneycontrol, 2024)</li></ul>
+</section>
+<section>
+<h2>15 · Current status: failure of the original company, survival of the business</h2>
+<p>GoMechanic should not be described as a simple “startup disappeared” story. The original growth-and-governance model collapsed in 2023, but the business was acquired by Servizzy/Lifelong and continued under new management. By 2024, the new operation reported ₹210 Cr FY24 revenue and EBITDA-positive operations in Q1 FY25. In December 2024 it said it had about 800 garages across 125 cities and ambitions to scale further. These are current-management claims, not audited Failure Lab conclusions. </p>
+<p>The original founders also became subjects of a Delhi Police EOW FIR in 2023 over allegations including cheating, forgery and falsification of accounts. Those allegations should remain labelled as allegations unless a later court finding establishes otherwise. (Indian Express, 2023)</p>
+</section>
+<section>
+<h2>16 · Failure Tree</h2>
+<div class="tree"><div class="root">GoMechanic crisis</div><div class="split"><div><strong>Growth pressure</strong><br/>Need to show scale<br/>Need next round<br/>Valuation expectations</div><div><strong>Control failure</strong><br/>Weak verification<br/>Unreliable reporting<br/>Information asymmetry</div><div><strong>Liquidity consequence</strong><br/>Funding fails<br/>Cash crunch<br/>Layoffs / distress sale</div></div><div class="branch">↓</div><div class="root">Investor trust collapses before the operating business can be repaired</div></div>
+</section>
+<section>
+<h2>17 · Tomorrow Test</h2>
+<p>If you were starting this business tomorrow, what would you check so you don't repeat this mistake?</p>
+<ol><li>Can I independently verify every major revenue KPI?</li><li>Can a random sample of reported jobs be traced from customer → workshop → invoice → bank?</li><li>Does the board see raw evidence, not only founder-prepared dashboards?</li><li>What percentage of reported revenue can be independently reconciled every month?</li><li>What happens if the next funding round does not happen?</li><li>Would the business survive at a lower valuation and without aggressive expansion?</li><li>Are the controls strong enough that a founder cannot quietly change the story?</li></ol>
+</section>
+<section class="sources">
+<h2>18 · Evidence &amp; Sources</h2>
+<ul>
+<li>TechCrunch — funding crisis, founder admission, investor findings and distressed acquisition. </li>
+<li>Moneycontrol — founder admission and reporting irregularities. </li>
+<li>Business Standard — distressed sale and subsequent operating turnaround. </li>
+<li>Indian Express — EOW FIR and allegations. (Indian Express, 2023)</li>
+<li>Moneycontrol / Business Standard / PTI — 2024 post-acquisition operating results. </li>
+<li>HDFC Securities — 2022 company-represented operating metrics. (HDFC Securities, 2022)</li>
+</ul>
+</section>
+<footer><strong>Failure Lab #004</strong><br/>Study the failure. Find the warning signal. Build the control before you need it.</footer>
+</main>
+</body>
+</html>

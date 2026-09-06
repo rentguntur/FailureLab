@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Failure Lab — Case #006: TinyOwl</title>
+<style>
+:root{--paper:#f7f4ee;--ink:#171717;--muted:#655f58;--line:#d8d0c4;--accent:#b9412b;--card:#fffdf8;--soft:#eee8de;--green:#356b4d;--warn:#8b5a18}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.65}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:5;background:rgba(247,244,238,.96);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900;font-size:20px;letter-spacing:-1px}.brand span{color:var(--accent)}
+.back{font-size:14px;color:var(--muted);text-decoration:none}
+.wrap{max-width:1120px;margin:auto;padding:0 24px}
+.hero{padding:72px 0 48px}
+.kicker{font-size:13px;font-weight:800;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(44px,7vw,82px);line-height:.96;letter-spacing:-4px;margin:12px 0 20px;max-width:850px}
+.deck{font-size:21px;line-height:1.45;max-width:780px;color:#4f4a45}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.pill{border:1px solid var(--line);padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700;background:var(--card)}
+.section{padding:54px 0;border-top:1px solid var(--line)}
+.num{font-size:12px;color:var(--accent);font-weight:800;letter-spacing:1.5px}
+h2{font-size:42px;letter-spacing:-2px;line-height:1.05;margin:8px 0 18px}
+h3{font-size:22px;margin:0 0 8px}
+.lead{font-size:19px;color:#514c46;max-width:820px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.card p{margin:7px 0;color:#504b45}
+.stat{font-size:34px;font-weight:900;letter-spacing:-1px}
+.note{background:#efe9df;border-left:4px solid var(--accent);padding:18px 20px;border-radius:10px;margin:20px 0}
+.quote{font-size:26px;line-height:1.25;font-weight:800;max-width:800px}
+.flow{display:flex;align-items:stretch;gap:10px;overflow-x:auto;padding:10px 0 18px}
+.flow .box{min-width:165px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;font-weight:800}
+.flow .arr{align-self:center;font-size:25px;color:var(--accent);font-weight:900}
+.trap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.trap .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;font-weight:800}
+.trap .step strong{display:block;font-size:13px;color:var(--accent);margin-bottom:5px}
+.chain{display:grid;gap:0;max-width:900px;margin:auto}
+.chainitem{background:var(--card);border:1px solid var(--line);padding:17px 20px;border-radius:14px;font-weight:800}
+.chainarrow{text-align:center;color:var(--accent);font-size:24px;font-weight:900;height:28px}
+.timeline{border-left:3px solid var(--line);padding-left:24px}
+.titem{position:relative;margin:0 0 26px}
+.titem:before{content:"";position:absolute;left:-32px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.year{font-weight:900;color:var(--accent);font-size:13px;letter-spacing:1px}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+figure img{display:block;width:100%;height:290px;object-fit:cover}
+figcaption{padding:13px 15px;font-size:12px;color:var(--muted)}
+figcaption a{color:var(--accent)}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{text-align:left;padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.checks{display:grid;gap:10px}
+.check{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+.check b{display:block}
+.footer{padding:60px 0 90px;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+@media(max-width:800px){.grid2,.grid3,.gallery{grid-template-columns:1fr}.trap{grid-template-columns:1fr 1fr}h1{letter-spacing:-2px}.hero{padding-top:48px}.top{padding:14px 18px}.wrap{padding:0 18px}}
+@media(max-width:520px){.trap{grid-template-columns:1fr}.flow .box{min-width:145px}h2{font-size:34px}}
+
+.debtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.source-list{display:grid;gap:10px}.source-list a{text-decoration:none;border-bottom:1px solid var(--line);padding:10px 0}.source-list a:hover{color:var(--accent)}.signal{display:grid;grid-template-columns:1.1fr 1.4fr 1.4fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:18px 0}.signal>div{padding:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}.signal .head{font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:1px;background:var(--soft)}@media(max-width:760px){.debtgrid{grid-template-columns:1fr}.signal{grid-template-columns:1fr}.signal>div{border-right:0}.gallery{grid-template-columns:1fr}.grid2,.grid3{grid-template-columns:1fr}}
+.gm-alert{border-left:5px solid #b42318;background:#fff4f2;padding:18px 20px;border-radius:12px;margin:20px 0}.gm-ok{border-left:5px solid #16704a;background:#f2faf6;padding:18px 20px;border-radius:12px;margin:20px 0}.gm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gm-card{border:1px solid #ddd;padding:16px;border-radius:12px;background:#fff}.gm-flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.gm-flow span{border:1px solid #cfcfcf;padding:10px 12px;border-radius:10px;background:#fafafa}.gm-arrow{font-weight:700}.gm-small{font-size:.9rem;color:#666}.gm-table{width:100%;border-collapse:collapse}.gm-table th,.gm-table td{border-bottom:1px solid #ddd;text-align:left;padding:10px 8px;vertical-align:top}.gm-table th{background:#f7f7f7}.sources a{overflow-wrap:anywhere}@media(max-width:760px){.gm-grid{grid-template-columns:1fr}.gm-flow{display:block}.gm-flow span{display:inline-block;margin:4px 0}.gm-arrow{display:block;margin:3px 0}}
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.gallery figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}.gallery img{width:100%;height:190px;object-fit:cover;display:block}.gallery figcaption{padding:10px 12px;font-size:11px;color:var(--muted)}.metric{background:var(--ink);color:#fffdf8;border-radius:18px;padding:24px}.metric .stat{color:#fffdf8}.source{font-size:13px;color:var(--muted);margin-top:8px}.source a{text-decoration:underline}.twocol{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.callout{background:#e9f0ea;border-left:4px solid var(--green);padding:18px 20px;border-radius:10px;margin:20px 0}.danger{background:#f2e4df;border-left:4px solid var(--accent);padding:18px 20px;border-radius:10px;margin:20px 0}@media(max-width:800px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.twocol{grid-template-columns:1fr}.gallery img{height:160px}}@media(max-width:520px){.gallery{grid-template-columns:1fr}}
+
+/* Failure Lab #006 additions */
+.trap .step{margin:.55rem 0;padding:.85rem 1rem;border:1px solid rgba(0,0,0,.12);border-radius:10px}
+.money>div{display:flex;gap:.8rem;align-items:center;justify-content:center;margin:.6rem 0;flex-wrap:wrap}
+.chain{display:flex;flex-direction:column;gap:.45rem;align-items:center}
+.chain div{padding:.7rem 1rem;border:1px solid rgba(0,0,0,.12);border-radius:10px;max-width:760px;text-align:center}
+.chain span{opacity:.55}
+.tree .root{padding:1rem;border:2px solid rgba(0,0,0,.18);border-radius:12px;text-align:center;font-weight:700}
+.branches{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-top:.8rem}
+.branches>div{padding:.75rem;border:1px solid rgba(0,0,0,.12);border-radius:10px}
+.branches span{display:block;margin-top:.3rem;font-size:.9em}
+@media(max-width:800px){.branches{grid-template-columns:1fr 1fr}}
+.loop{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:20px 0}
+.loop .node{background:var(--card,#fffdf8);border:1px solid rgba(0,0,0,.12);border-radius:14px;padding:16px;font-weight:700;flex:1 1 150px}
+.loop .arrow{display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;color:var(--accent,#b9412b)}
+@media(max-width:760px){.loop{flex-direction:column}.loop .arrow{transform:rotate(90deg);height:24px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">FAILURE<span>LAB</span></div><a class="back" href="../../index.html">← Back to all cases</a></header>
+<main class="wrap">
+<section class="hero">
+<div class="kicker">Case #006 · Food delivery · Operations</div>
+<h1>TinyOwl: when capacity grew faster than demand</h1>
+<p class="deck">TinyOwl did not fail because nobody wanted to order food from an app. It failed because the company hired people and built delivery capacity in city after city before proving that local demand was dense enough to keep that capacity busy — then had to reverse those decisions while cash was running out.</p>
+<div class="pillrow"><span class="pill">Capacity discipline</span><span class="pill">Unit economics</span><span class="pill">Rapid expansion</span><span class="pill">Funding dependence</span><span class="pill">Acquisition &amp; wind-down</span></div>
+<div class="note"><strong>The core lesson:</strong> Capacity is not free just because funding paid for it. Hiring and delivery fleets only become efficient once real order density arrives — and growth targets are not the same thing as proven demand.</div>
+</section>
+<div class="gallery"><figure><img alt="TinyOwl founding team" loading="lazy" src="https://media.licdn.com/dms/image/v2/C4D12AQEx52X2qk9oSA/article-inline_image-shrink_1000_1488/article-inline_image-shrink_1000_1488/0/1598630331406?e=1776297600&amp;t=9HXXwJ6zqpa-mJg0uBDUweKLrKwfg27b0IF_bwkN8bU&amp;v=beta"/><figcaption>TinyOwl founding team — Image surfaced with reporting on TinyOwl's early story.</figcaption></figure><figure><img alt="TinyOwl app menu" loading="lazy" src="https://assets.techcircle.in/images/2015/10/vccircle-tinyowl.jpg"/><figcaption>TinyOwl app menu — Contemporary TechCircle/VCCircle product image.</figcaption></figure><figure><img alt="TinyOwl office" loading="lazy" src="https://images.livemint.com/rf/Image-621x414/LiveMint/Period2/2016/05/19/Photos/tinyowl-k0oF--621x414%40LiveMint.jpg"/><figcaption>TinyOwl office — Contemporary LiveMint reporting image.</figcaption></figure><figure><img alt="TinyOwl app" loading="lazy" src="https://img.etimg.com/thumb/width-1200%2Cheight-900%2Cimgsize-240665%2Cresizemode-75%2Cmsid-47261473/magazines/panache/food-ordering-app-tinyowl-compiles-ipls-favourite-recipes.jpg"/><figcaption>TinyOwl app — Contemporary Economic Times product image.</figcaption></figure></div><section class="section"><div class="num">01 · THE BUSINESS BEFORE THE FAILURE</div><h2>What was TinyOwl?</h2><p class="lead">TinyOwl was a Mumbai-based food-ordering platform founded in 2014 by five IIT Bombay graduates. Customers ordered from nearby restaurants through an app; TinyOwl earned a commission from restaurants and, for a period, also operated its own delivery fleet.</p>
+<div class="grid3">
+<div class="metric"><div class="stat">2014</div><p>Founded</p></div>
+<div class="metric"><div class="stat">11 cities</div><p>Reported footprint before the retreat</p></div>
+<div class="metric"><div class="stat">~$27M</div><p>Funding reported by TechCrunch by 2016</p></div>
+</div>
+<p>TinyOwl's story is useful because the failure was not simply “food delivery is hard.” The company grew faster than its operating structure, hired and deployed capacity ahead of proven demand, and then had to reverse those decisions while its cash position was deteriorating.</p></section>
+<section class="section"><div class="num">02 · WHAT IT LOOKED LIKE FROM THE OUTSIDE</div><h2>The early signals were genuinely strong.</h2><div class="grid2">
+<div class="card"><h3>Real traction</h3><p>In early 2015, TinyOwl reported thousands of daily orders and thousands of restaurant listings in Mumbai. It had raised major venture funding and was expanding beyond its original market.</p></div>
+<div class="card"><h3>Real ambition</h3><p>In February 2015, the company raised $16M and publicly targeted more than 50 cities and 50,000 daily orders by year-end, from a reported 3,000–5,000 orders a day at the time.</p></div>
+</div>
+<div class="note"><strong>The trap:</strong> ambition was converted into operating capacity before the company had proved that the economics and management system would survive that speed.</div></section>
+<section class="section"><div class="num">03 · BUSINESS MODEL FLOW</div><h2>The machine had more moving parts than the app suggested.</h2><div class="flow">
+<div class="node"><strong>Customer</strong>opens app and orders</div><div class="arrow">→</div>
+<div class="node"><strong>TinyOwl</strong>matches demand to restaurants</div><div class="arrow">→</div>
+<div class="node"><strong>Restaurant</strong>prepares food</div><div class="arrow">→</div>
+<div class="node"><strong>Delivery</strong>collects and delivers</div><div class="arrow">→</div>
+<div class="node"><strong>TinyOwl</strong>earns commission / service economics</div>
+</div>
+<p class="lead">The crucial operating question was not whether the app could take an order. It was whether each city could generate enough dense, repeat demand to justify the people, delivery capacity, sales effort and support structure needed to serve it.</p></section>
+<section class="section"><div class="num">04 · WHY IT LOOKED INVESTABLE</div><h2>Funding created permission to move fast.</h2><div class="grid3">
+<div class="metric"><div class="stat">₹100 Cr</div><p>Series B reported Feb 2015</p></div>
+<div class="metric"><div class="stat">50 cities</div><p>Public expansion target</p></div>
+<div class="metric"><div class="stat">50,000/day</div><p>Public order target</p></div>
+</div>
+<p>TinyOwl's investors included Sequoia Capital, Matrix Partners and Nexus Venture Partners. The funding was not irrational: food ordering was an emerging category, TinyOwl had visible customer demand, and the company believed density could be built rapidly.</p>
+<div class="callout"><strong>Failure Lab distinction:</strong> capital did not cause the failure. It changed the speed at which an unproven operating model was allowed to expand.</div></section><section class="section"><div class="num">05 · FINANCIAL SNAPSHOT</div><h2>The runway became a countdown.</h2><div class="grid3">
+<div class="metric"><div class="stat">₹2.5 Cr/month</div><p>Average burn reported in Mar 2016</p></div>
+<div class="metric"><div class="stat">₹18 Cr</div><p>Cash reportedly left at end-Jan 2016</p></div>
+<div class="metric"><div class="stat">₹50 Cr</div><p>Fresh funding raised Oct 2015</p></div>
+</div>
+<p>Business Standard reported average burn of about ₹2.5 crore a month and ₹18 crore left at the end of January 2016, after about ₹152 crore had been raised over the previous 18 months. The company then sought further restructuring and a sustainable model.</p>
+<div class="note"><strong>Important reconciliation:</strong> contemporaneous reports put cumulative funding around ₹150–152 crore, while other sources reported TinyOwl had raised about $23M or $27M depending on date and inclusion. These figures should not be mixed as though they are the same measurement.</div></section>
+<section class="section"><div class="num">06 · TIMELINE</div><h2>From one-city product to forced retreat.</h2><div class="timeline">
+<div><b>2014</b><span>Launches in Mumbai; raises early venture capital.</span></div>
+<div><b>Feb 2015</b><span>Raises $16M / about ₹100 Cr; announces aggressive national expansion.</span></div>
+<div><b>May–Jul 2015</b><span>Expands beyond Mumbai into multiple cities; targets 50 cities.</span></div>
+<div><b>Sep–Nov 2015</b><span>Mass layoffs and city shutdowns begin as burn and organisational strain become visible.</span></div>
+<div><b>Oct 2015</b><span>Raises ₹50 Cr; begins restructuring and outsources last-mile delivery.</span></div>
+<div><b>Jan–Mar 2016</b><span>Cash pressure remains severe; another pivot and potential sale/combination are explored.</span></div>
+<div><b>May–Jun 2016</b><span>Operations retreat to Mumbai; Roadrunnr acquires TinyOwl and launches Runnr.</span></div>
+<div><b>Sep 2017</b><span>Zomato acquires Runnr, the combined successor.</span></div>
+</div></section>
+<section class="section"><div class="num">07 · THE MONEY JOURNEY</div><h2>The important variable was not funding. It was what funding bought.</h2><div class="money">
+<div><strong>Capital raised</strong><span>→</span><strong>Hiring + city launches + delivery capacity</strong></div>
+<div><strong>More capacity</strong><span>→</span><strong>Higher fixed / semi-fixed cost</strong></div>
+<div><strong>Demand below plan</strong><span>→</span><strong>Low utilisation</strong></div>
+<div><strong>Low utilisation</strong><span>→</span><strong>Weak unit economics</strong></div>
+<div><strong>Weak economics</strong><span>→</span><strong>Need for more capital or rapid cuts</strong></div>
+</div>
+<p>The key failure was a mismatch between <strong>capacity growth</strong> and <strong>validated demand density</strong>. A delivery fleet, city team or support organisation only becomes efficient when enough orders flow through it.</p></section>
+<section class="section"><div class="num">08 · THE TINYOwl TRAP</div><h2>Capacity was scaled before density was proven.</h2><div class="trap">
+<div class="step"><strong>1. TARGET</strong>Set a very large city and order goal.</div>
+<div class="step"><strong>2. BUILD</strong>Hire people, launch cities and build delivery capacity.</div>
+<div class="step"><strong>3. WAIT</strong>Demand density takes time to develop.</div>
+<div class="step"><strong>4. PAY</strong>Underused people and delivery capacity still consume cash.</div>
+<div class="step"><strong>5. CUT</strong>Layoffs and city closures become necessary.</div>
+<div class="step"><strong>6. DAMAGE</strong>Service, morale and organisational trust deteriorate during the retreat.</div>
+</div></section><section class="section"><div class="num">09 · THE CAPACITY TRAP</div><h2>A delivery fleet is useful only when the orders can keep it busy.</h2><p class="lead">Founder Saurabh Goyal later described the problem clearly: TinyOwl had been pursuing extremely aggressive growth, and at one point had around 1,000 delivery workers even though the order scale did not require that capacity. He linked the mismatch directly to unit economics.</p>
+<div class="grid2">
+<div class="card"><h3>Before the hire</h3><p>Demand is uncertain. Capacity is variable. Test the city with partners and measure order density.</p></div>
+<div class="card"><h3>After the hire</h3><p>Capacity becomes a cost that needs utilisation. If orders do not arrive, every idle rider makes the economics worse.</p></div>
+</div>
+<div class="callout"><strong>Transferable lesson:</strong> before converting a variable cost into a fixed or semi-fixed commitment, prove that demand density will keep that capacity productive.</div></section>
+<section class="section"><div class="num">10 · FAILURE CHAIN</div><h2>How the problem became fatal.</h2><div class="chain">
+<div>Ambitious national target</div><span>↓</span>
+<div>Rapid city launches</div><span>↓</span>
+<div>Hiring and delivery capacity ahead of demand</div><span>↓</span>
+<div>Low utilisation + organisational complexity</div><span>↓</span>
+<div>Burn rises while unit economics weaken</div><span>↓</span>
+<div>Funding becomes the bridge</div><span>↓</span>
+<div>Funding environment tightens</div><span>↓</span>
+<div>Layoffs + city closures + outsourcing</div><span>↓</span>
+<div>Retreat / acquisition into Runnr</div>
+</div>
+<div class="note"><strong>Root-cause caution:</strong> “ran out of money” is the terminal condition. The more useful Failure Lab question is why the organisation needed so much money to maintain a level of activity that had not yet proved locally sustainable.</div></section><section class="section"><div class="num">11 · COMPETITION — AND WHAT IT DID NOT EXPLAIN</div><h2>Competition increased the pressure. It did not write the operating plan.</h2><div class="grid2">
+<div class="card"><h3>What competition changed</h3><p>Foodpanda, Zomato and other delivery players were expanding. Customer acquisition and restaurant relationships became more contested, while investor enthusiasm for discount-led consumer internet businesses began cooling.</p></div>
+<div class="card"><h3>What management still controlled</h3><p>How many cities to enter, how much capacity to own, what metrics to gate expansion on, how to structure city teams, and how quickly to retreat when the economics failed.</p></div>
+</div>
+<p>That distinction matters. A difficult market can expose a weak operating system, but it does not remove management's responsibility for choosing how much risk to take.</p></section>
+<section class="section"><div class="num">12 · THE SMALLEST USEFUL UNIT</div><h2>The city — not the national app — was the real test.</h2><div class="grid2">
+<div class="card"><h3>Measure by city</h3><p>Orders/day, repeat rate, average order value, commission revenue, delivery cost, city payroll, customer acquisition cost and contribution after variable operating costs.</p></div>
+<div class="card"><h3>Then measure density</h3><p>Orders per rider-hour, orders per support employee, restaurant productivity and peak-hour utilisation. A city can look large in total users and still be economically thin.</p></div>
+</div>
+<div class="callout"><strong>Decision rule:</strong> do not expand because the national dashboard looks impressive. Expand because the last cohort of cities has demonstrated a repeatable local operating model.</div></section>
+<section class="section"><div class="num">13 · WARNING SIGNALS</div><h2>What should have triggered a stop-and-review?</h2><div class="grid2">
+<div class="card"><h3>Signal 1 — capacity outruns orders</h3><p><strong>Check:</strong> utilisation by city and rider.</p><p><strong>Action:</strong> freeze hiring and convert more delivery capacity to variable partners.</p></div>
+<div class="card"><h3>Signal 2 — burn rises faster than contribution</h3><p><strong>Check:</strong> monthly burn and contribution by city.</p><p><strong>Action:</strong> stop adding cities until existing cohorts improve.</p></div>
+<div class="card"><h3>Signal 3 — repeated restructures</h3><p><strong>Check:</strong> whether the operating model has changed repeatedly without a stable metric improvement.</p><p><strong>Action:</strong> pause expansion and run a model-level review.</p></div>
+<div class="card"><h3>Signal 4 — layoffs become the operating plan</h3><p><strong>Check:</strong> whether cuts are correcting a temporary spike or reversing structural overcapacity.</p><p><strong>Action:</strong> reset the growth plan, not just headcount.</p></div>
+</div></section>
+<section class="section"><div class="num">14 · EARLY-WARNING LOOP</div><h2>Turn the lesson into a management system.</h2><div class="loop">
+<div><b>Weekly</b><span>City demand + capacity utilisation</span></div>
+<div><b>Monthly</b><span>Contribution and burn by city</span></div>
+<div><b>Gate</b><span>No expansion unless the current cohort clears the agreed thresholds</span></div>
+<div><b>Trigger</b><span>Two consecutive misses → freeze hiring / expansion</span></div>
+<div><b>Decision</b><span>Improve, shrink, outsource, or exit — before the cash crisis forces the choice</span></div>
+</div></section>
+<section class="section"><div class="num">15 · WHO SHOULD HAVE ACTED?</div><h2>Different people owned different warning signs.</h2><div class="grid3">
+<div class="metric"><div class="stat">Management</div><p>Set expansion gates and capacity discipline.</p></div>
+<div class="metric"><div class="stat">Board</div><p>Challenge growth assumptions and runway.</p></div>
+<div class="metric"><div class="stat">Investors</div><p>Fund milestones, not only geographic ambition.</p></div>
+</div>
+<p>There is no evidence that one person alone “caused” the failure. The more useful lesson is governance of growth: once the organisation moved from one dense market toward many cities, someone needed authority to say <strong>“prove the last cohort before adding the next one.”</strong></p></section>
+<section class="section"><div class="num">16 · COULD TINYOwl HAVE BEEN SAVED?</div><h2>Possibly — but the rescue required shrinking before the cash forced it.</h2><p class="lead">This is counterfactual analysis, not a historical fact. By late 2015 the company was already restructuring, outsourcing deliveries and raising another ₹50 crore. That shows the team recognised the problem. The question is whether the reset could have happened earlier and more decisively.</p>
+<div class="grid2">
+<div class="card"><h3>Earlier intervention</h3><p>Keep a small number of dense cities. Use outsourced delivery while demand is uncertain. Make city-level contribution the expansion gate.</p><p><strong>Possible rule:</strong> no new city until the previous cohort reaches defined utilisation and contribution thresholds.</p></div>
+<div class="card"><h3>Harder intervention</h3><p>Accept a much smaller business with slower growth, fewer employees and less owned capacity.</p><p><strong>Possible rule:</strong> preserve runway first; maximise geography only after the operating model is repeatable.</p></div>
+</div></section>
+<section class="section"><div class="num">17 · STAKEHOLDER IMPACT</div><h2>The failure was not only a founder or investor problem.</h2><div class="grid3">
+<div class="metric"><div class="stat">Employees</div><p>Layoffs and abrupt city closures created serious disputes over employment payments.</p></div>
+<div class="metric"><div class="stat">Restaurants</div><p>Partners lost a channel and had to adjust to a rapidly changing platform footprint.</p></div>
+<div class="metric"><div class="stat">Investors</div><p>Capital shifted from growth to restructuring, followed by consolidation.</p></div>
+</div>
+<p>The 2015 Pune episode, where a co-founder was held by employees during a dispute over layoffs and payments, became the visible symbol of how quickly a financial restructuring can become an organisational crisis. It should be treated as a consequence of the breakdown, not as the root cause.</p></section>
+<section class="section"><div class="num">18 · CURRENT STATUS</div><h2>TinyOwl did not simply vanish; it was absorbed into a successor.</h2><p class="lead">In 2016, Roadrunnr acquired TinyOwl and rebranded the combined operation as Runnr. Runnr subsequently raised additional capital and was acquired by Zomato in 2017. Therefore the accurate description is: <strong>the original TinyOwl operating model and brand did not survive independently; its technology, people and business were absorbed into successive combinations.</strong></p>
+<div class="timeline">
+<div><b>2016</b><span>TinyOwl acquired by Roadrunnr; combined company becomes Runnr.</span></div>
+<div><b>2016</b><span>Runnr raises additional capital after the combination.</span></div>
+<div><b>2017</b><span>Zomato acquires Runnr.</span></div>
+</div></section>
+<section class="section"><div class="num">19 · FAILURE TREE</div><h2>One root problem, several branches.</h2><div class="tree">
+<div class="root"><strong>Growth was faster than the operating system could safely support</strong></div>
+<div class="branches">
+<div><b>Capacity</b><span>Fleet and headcount ahead of demand</span></div>
+<div><b>Economics</b><span>Low utilisation weakened unit economics</span></div>
+<div><b>Organisation</b><span>City structures and management did not keep pace</span></div>
+<div><b>Cash</b><span>High burn increased dependence on funding</span></div>
+<div><b>Retreat</b><span>Layoffs and closures arrived under pressure</span></div>
+</div>
+</div>
+<div class="note"><strong>Failure Lab analysis:</strong> the strongest evidence points to a combination of premature operating capacity, weak unit economics and organisational strain — not to a single “bad decision.”</div></section>
+<section class="section"><div class="num">20 · TOMORROW TEST</div><h2>If you were starting this business tomorrow, what would you check so you don't repeat this mistake?</h2><div class="grid2">
+<div class="card"><h3>Before opening a city</h3><p>What is the minimum order density required to make the city contribution-positive?</p><p>Can the first 90 days be served with mostly variable capacity?</p><p><strong>Gate:</strong> no city launch without a measurable path to local break-even.</p></div>
+<div class="card"><h3>Before hiring ahead</h3><p>What demand is already proven, not merely forecast?</p><p>What utilisation level makes the added team economically sensible?</p><p><strong>Gate:</strong> convert variable capacity to fixed capacity only after utilisation is demonstrated.</p></div>
+<div class="card"><h3>Every month</h3><p>Is burn falling as volume rises?</p><p>Are city-level contribution and utilisation improving?</p><p><strong>Gate:</strong> two consecutive misses trigger a freeze on expansion.</p></div>
+<div class="card"><h3>When funding is available</h3><p>What exactly will the next ₹1 crore buy?</p><p>Does it improve the core metric or only make the company bigger?</p><p><strong>Gate:</strong> capital must fund a proven operating loop, not substitute for proof.</p></div>
+</div></section>
+<section class="section"><div class="num">21 · EVIDENCE &amp; SOURCES</div><h2>What this case is based on.</h2><div class="sources">
+<p><strong>Primary / contemporaneous reporting</strong></p>
+<ul>
+<li><a href="https://techcrunch.com/2015/02/26/tinyowl/">TechCrunch — TinyOwl's $16M Series B and 50-city target</a></li>
+<li><a href="https://economictimes.indiatimes.com/small-biz/startups/tinyowl-mops-up-rs-100-crore-from-matrix-partners-india-and-existing-investors-sequoia-capital-nexus-venture-partners/articleshow/46390506.cms">Economic Times — ₹100 Cr funding, Feb 2015</a></li>
+<li><a href="https://www.business-standard.com/amp/article/companies/six-mistakes-of-tinyowl-the-blue-eyed-start-up-child-116031400038_1.html">Business Standard — burn, cash position and operational mistakes</a></li>
+<li><a href="https://economictimes.indiatimes.com/small-biz/startups/tinyowl-gets-rs-50-crore-lifeline-from-investors/articleshow/49591358.cms">Economic Times — ₹50 Cr restructuring round and 43% cost reduction claim</a></li>
+<li><a href="https://economictimes.indiatimes.com/magazines/panache/the-rise-and-fall-of-tinyowl-lessons-that-start-up-founder-saurabh-goyal-learnt/articleshow/60069036.cms">Economic Times — founder retrospective on hiring, capacity and core metrics</a></li>
+<li><a href="https://www.medianama.com/2016/06/223-roadrunnr-acquires-tinyowl-runnr-2/">MediaNama — Roadrunnr acquisition and Runnr rebrand</a></li>
+<li><a href="https://techcrunch.com/2017/09/13/zomato-buys-runnr/">TechCrunch — Zomato acquisition of Runnr</a></li>
+</ul>
+<p><strong>How to read this case:</strong> Funding, expansion, layoffs and acquisitions are verified events. The causal chain and intervention rules are Failure Lab analysis built from those events plus the founder's retrospective. Where contemporary sources report different funding totals, the page keeps the measurements separate rather than forcing one number.</p>
+</div></section>
+</main>
+<footer class="wrap" style="padding:40px 24px 70px;color:var(--muted);font-size:13px">Failure Lab · Case #006 · TinyOwl</footer>
+</body>
+</html>

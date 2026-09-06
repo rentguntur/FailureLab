@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Failure Lab — Case #005: Stayzilla</title>
+<style>
+:root{--paper:#f7f4ee;--ink:#171717;--muted:#655f58;--line:#d8d0c4;--accent:#b9412b;--card:#fffdf8;--soft:#eee8de;--green:#356b4d;--warn:#8b5a18}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.65}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:5;background:rgba(247,244,238,.96);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900;font-size:20px;letter-spacing:-1px}.brand span{color:var(--accent)}
+.back{font-size:14px;color:var(--muted);text-decoration:none}
+.wrap{max-width:1120px;margin:auto;padding:0 24px}
+.hero{padding:72px 0 48px}
+.kicker{font-size:13px;font-weight:800;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(44px,7vw,82px);line-height:.96;letter-spacing:-4px;margin:12px 0 20px;max-width:850px}
+.deck{font-size:21px;line-height:1.45;max-width:780px;color:#4f4a45}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.pill{border:1px solid var(--line);padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700;background:var(--card)}
+.section{padding:54px 0;border-top:1px solid var(--line)}
+.num{font-size:12px;color:var(--accent);font-weight:800;letter-spacing:1.5px}
+h2{font-size:42px;letter-spacing:-2px;line-height:1.05;margin:8px 0 18px}
+h3{font-size:22px;margin:0 0 8px}
+.lead{font-size:19px;color:#514c46;max-width:820px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.card p{margin:7px 0;color:#504b45}
+.stat{font-size:34px;font-weight:900;letter-spacing:-1px}
+.note{background:#efe9df;border-left:4px solid var(--accent);padding:18px 20px;border-radius:10px;margin:20px 0}
+.quote{font-size:26px;line-height:1.25;font-weight:800;max-width:800px}
+.flow{display:flex;align-items:stretch;gap:10px;overflow-x:auto;padding:10px 0 18px}
+.flow .box{min-width:165px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;font-weight:800}
+.flow .arr{align-self:center;font-size:25px;color:var(--accent);font-weight:900}
+.trap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.trap .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;font-weight:800}
+.trap .step strong{display:block;font-size:13px;color:var(--accent);margin-bottom:5px}
+.chain{display:grid;gap:0;max-width:900px;margin:auto}
+.chainitem{background:var(--card);border:1px solid var(--line);padding:17px 20px;border-radius:14px;font-weight:800}
+.chainarrow{text-align:center;color:var(--accent);font-size:24px;font-weight:900;height:28px}
+.timeline{border-left:3px solid var(--line);padding-left:24px}
+.titem{position:relative;margin:0 0 26px}
+.titem:before{content:"";position:absolute;left:-32px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.year{font-weight:900;color:var(--accent);font-size:13px;letter-spacing:1px}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+figure img{display:block;width:100%;height:290px;object-fit:cover}
+figcaption{padding:13px 15px;font-size:12px;color:var(--muted)}
+figcaption a{color:var(--accent)}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{text-align:left;padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.checks{display:grid;gap:10px}
+.check{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+.check b{display:block}
+.footer{padding:60px 0 90px;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+@media(max-width:800px){.grid2,.grid3,.gallery{grid-template-columns:1fr}.trap{grid-template-columns:1fr 1fr}h1{letter-spacing:-2px}.hero{padding-top:48px}.top{padding:14px 18px}.wrap{padding:0 18px}}
+@media(max-width:520px){.trap{grid-template-columns:1fr}.flow .box{min-width:145px}h2{font-size:34px}}
+
+.debtgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.source-list{display:grid;gap:10px}.source-list a{text-decoration:none;border-bottom:1px solid var(--line);padding:10px 0}.source-list a:hover{color:var(--accent)}.signal{display:grid;grid-template-columns:1.1fr 1.4fr 1.4fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:18px 0}.signal>div{padding:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}.signal .head{font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:1px;background:var(--soft)}@media(max-width:760px){.debtgrid{grid-template-columns:1fr}.signal{grid-template-columns:1fr}.signal>div{border-right:0}.gallery{grid-template-columns:1fr}.grid2,.grid3{grid-template-columns:1fr}}
+.gm-alert{border-left:5px solid #b42318;background:#fff4f2;padding:18px 20px;border-radius:12px;margin:20px 0}.gm-ok{border-left:5px solid #16704a;background:#f2faf6;padding:18px 20px;border-radius:12px;margin:20px 0}.gm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gm-card{border:1px solid #ddd;padding:16px;border-radius:12px;background:#fff}.gm-flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.gm-flow span{border:1px solid #cfcfcf;padding:10px 12px;border-radius:10px;background:#fafafa}.gm-arrow{font-weight:700}.gm-small{font-size:.9rem;color:#666}.gm-table{width:100%;border-collapse:collapse}.gm-table th,.gm-table td{border-bottom:1px solid #ddd;text-align:left;padding:10px 8px;vertical-align:top}.gm-table th{background:#f7f7f7}.sources a{overflow-wrap:anywhere}@media(max-width:760px){.gm-grid{grid-template-columns:1fr}.gm-flow{display:block}.gm-flow span{display:inline-block;margin:4px 0}.gm-arrow{display:block;margin:3px 0}}
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.gallery figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}.gallery img{width:100%;height:190px;object-fit:cover;display:block}.gallery figcaption{padding:10px 12px;font-size:11px;color:var(--muted)}.metric{background:var(--ink);color:#fffdf8;border-radius:18px;padding:24px}.metric .stat{color:#fffdf8}.source{font-size:13px;color:var(--muted);margin-top:8px}.source a{text-decoration:underline}.twocol{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.callout{background:#e9f0ea;border-left:4px solid var(--green);padding:18px 20px;border-radius:10px;margin:20px 0}.danger{background:#f2e4df;border-left:4px solid var(--accent);padding:18px 20px;border-radius:10px;margin:20px 0}@media(max-width:800px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.twocol{grid-template-columns:1fr}.gallery img{height:160px}}@media(max-width:520px){.gallery{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">FAILURE<span>LAB</span></div><a class="back" href="../../index.html">← Back to all cases</a></header>
+<main class="wrap">
+<section class="hero">
+<div class="kicker">Case #005 · Marketplace · Travel</div>
+<h1>Stayzilla: when growth hid the cash problem</h1>
+<p class="deck">Stayzilla did not fail because nobody wanted alternative stays. It failed because the company moved from a model that generated cash to one that required heavy spending on both sides of a young marketplace — while the scorecard increasingly rewarded growth metrics instead of cash flow and working capital.</p>
+<div class="pillrow"><span class="pill">Working capital</span><span class="pill">Marketplace liquidity</span><span class="pill">Growth discipline</span><span class="pill">Funding dependence</span><span class="pill">Shutdown &amp; insolvency</span></div>
+<div class="note"><strong>The core lesson:</strong> A marketplace can look bigger every month while becoming harder to fund. If demand and supply must both be created, growth is not free — and GMV is not cash.</div>
+</section>
+<section class="section"><div class="num">01 · THE BUSINESS BEFORE THE FAILURE</div><h2>What was Stayzilla?</h2><p class="lead">Stayzilla started as an online accommodation marketplace, initially focused on budget hotels and later moving heavily into homestays and alternative stays. By early 2017 it claimed more than 55,000 stay options across about 4,500 towns. It had raised roughly $33–34 million.</p>
+<div class="grid3"><div class="card"><h3>Customer</h3><p>Travellers looking for hotels, homestays and alternative accommodation.</p></div><div class="card"><h3>Supply</h3><p>Small hotels, homestays and other accommodation providers, including in smaller towns.</p></div><div class="card"><h3>Revenue</h3><p>A commission-based marketplace: earn when a booking happens.</p></div></div>
+<p class="source">Sources: <a href="https://economictimes.indiatimes.com/small-biz/startups/stayzilla-suspends-operations-to-reboot-with-new-business-model/articleshow/57320857.cms">Economic Times</a> · <a href="https://research.manchester.ac.uk/files/78788183/2017_T_uscher_Kietzmann_Learning_from_Failures_in_the_Sharing_Economy.pdf">University of Manchester research</a></p></section>
+<section class="section"><div class="num">02 · WHAT IT LOOKED LIKE FROM THE OUTSIDE</div><h2>A lot of progress was real.</h2>
+<div class="gallery">
+<figure><img src="https://bsmedia.business-standard.com/_media/bs/img/article/2015-03/30/full/1427658562-4245.jpg"/><figcaption>Founders presenting the platform. Business Standard, 2015.</figcaption></figure>
+<figure><img src="https://images.yourstory.com/cs/wordpress/2017/03/stayzilla.jpg"/><figcaption>Stayzilla team and brand campaign. YourStory, 2017.</figcaption></figure>
+<figure><img src="https://cdn.indiblogger.in/microsites/bnlf/v1/img/partners/stayzilla/mobile-3.png"/><figcaption>Stayzilla mobile booking interface.</figcaption></figure>
+<figure><img src="https://images.hindustantimes.com/rf/image_size_960x540/HT/p2/2017/03/16/Pictures/_e454a0f4-0a48-11e7-ba13-f6aef3964879.jpg"/><figcaption>Co-founders. Hindustan Times, 2017.</figcaption></figure>
+</div>
+<div class="grid3"><div class="metric"><div class="stat">55,000+</div><p>stay options claimed by early 2017</p></div><div class="metric"><div class="stat">4,500</div><p>towns claimed on the network</p></div><div class="metric"><div class="stat">$34M+</div><p>funding reported across four rounds</p></div></div></section>
+<section class="section"><div class="num">03 · BUSINESS MODEL FLOW</div><h2>The machine had two sides.</h2>
+<div class="flow"><div class="box">Acquire hosts</div><div class="arr">→</div><div class="box">List stays</div><div class="arr">→</div><div class="box">Acquire travellers</div><div class="arr">→</div><div class="box">Match demand + supply</div><div class="arr">→</div><div class="box">Booking</div><div class="arr">→</div><div class="box">Commission</div></div>
+<div class="danger"><strong>The hidden cost:</strong> In a mature marketplace, one side can pull the other. Stayzilla said homestay demand and supply were still absent in many locations, so it had to spend on both sides — creating hosts and creating guests.</div></section>
+<section class="section"><div class="num">04 · WHY IT LOOKED INVESTABLE</div><h2>Scale was visible. The cash engine was less visible.</h2>
+<div class="grid2"><div class="card"><h3>Real achievements</h3><p>Stayzilla built a large national network, moved beyond budget hotels into homestays, and worked with tourism bodies. The company also invested in technology for demand forecasting, price prediction and booking-confirmation prediction.</p></div><div class="card"><h3>The dangerous scoreboard</h3><p>Founder Yogendra Vasupal later said the company had shifted attention toward GMV and room-nights and away from cash flow and working capital. That is a founder's retrospective explanation, not an independent causal finding — but it is consistent with the marketplace economics he described.</p></div></div>
+<p class="source">Sources: <a href="https://medium.com/stayzilla/stayzilla-will-reboot-its-operations-5cc5b854b368">Founder post-mortem</a> · <a href="https://www.business-standard.com/article/companies/full-text-stayzilla-ceo-explains-why-he-has-to-shut-shop-and-reboot-117022400309_1.html">Business Standard</a></p></section><section class="section">
+<div class="num">05 · FINANCIAL SNAPSHOT</div>
+<h2>Growth accelerated. Losses accelerated faster.</h2>
+<p class="lead">The reported FY15–FY16 numbers make the warning visible: revenue grew strongly, but losses and marketing spend grew much faster. These figures are a financial snapshot, not a complete reconstruction of cash flow.</p>
+<div class="grid3">
+<div class="metric"><div class="stat">₹4.2 Cr → ₹13.8 Cr</div><p>Reported revenue, FY15 → FY16</p></div>
+<div class="metric"><div class="stat">₹19.6 Cr → ₹94.5 Cr</div><p>Reported loss, FY15 → FY16</p></div>
+<div class="metric"><div class="stat">₹11.2 Cr → ₹56 Cr</div><p>Reported marketing spend, FY15 → FY16</p></div>
+</div>
+<div class="note"><strong>What matters:</strong> revenue increased about 3.3×, while reported losses increased about 4.8× and marketing spend about 5×. That does not by itself prove marketing caused the failure; it shows that growth was becoming substantially more expensive than the revenue growth it produced.</div>
+<p class="source">Source: <a href="https://buildd.co/startup/failure-stories/why-did-stayzilla-fail">Buildd's reconstruction of FY15–FY16 financials</a>. These are reported figures from that analysis, not audited statements reproduced here.</p>
+</section>
+<section class="section"><div class="num">06 · TIMELINE</div><h2>From cash-positive roots to a funding-dependent marketplace.</h2>
+<div class="timeline">
+<div class="titem"><strong>2005–2012</strong><p>Inasra is built around online accommodation. The founder later described the first seven years as a period of negative working capital, positive cash flow and internally funded growth.</p></div>
+<div class="titem"><strong>2010</strong><p>Stayzilla becomes the consumer-facing brand as the company develops its accommodation marketplace.</p></div>
+<div class="titem"><strong>2014–2015</strong><p>The company pushes aggressively into scale and alternative stays. Business Standard reported 20,000+ properties across 1,200 locations in 2015.</p></div>
+<div class="titem"><strong>2015–2016</strong><p>Travel competition and discounting intensify. Stayzilla invests heavily in both sides of the homestay marketplace and expands across India.</p></div>
+<div class="titem"><strong>May 2016</strong><p>Series C funding of about $13.5M is reported. The company continues building the homestay network.</p></div>
+<div class="titem"><strong>Feb 23–24, 2017</strong><p>Stayzilla suspends new bookings, honours near-term bookings and announces a planned reboot with a different business model. A large team is let go.</p></div>
+<div class="titem"><strong>Sep 15, 2017</strong><p>NCLT admits insolvency proceedings against Inasra Technologies following a vendor claim.</p></div>
+<div class="titem"><strong>Aug–Sep 2018</strong><p>NCLT orders liquidation; IBBI records Inasra as defunct, with admitted claims of ₹10.81 lakh and no resolution plans.</p></div>
+</div></section>
+<section class="section"><div class="num">07 · THE MONEY JOURNEY</div><h2>The model changed before the headline did.</h2>
+<div class="trap"><div class="step"><strong>EARLY MODEL</strong>Customer booking → commission → cash inflow. Founder says working capital and cash flow were healthy.</div><div class="step"><strong>MARKET CREATION</strong>Need hosts + guests in places where neither side was dense.</div><div class="step"><strong>GROWTH SPEND</strong>Marketing, marketplace teams, supply creation and discounts absorb cash before commissions arrive.</div><div class="step"><strong>FUNDING DEPENDENCE</strong>More growth requires more capital. If new investors do not arrive, the operating model loses room to breathe.</div></div>
+<div class="callout"><strong>Failure Lab analysis:</strong> The key transition was not simply “losses increased.” It was a change in the cash architecture of the business: from a model that could fund growth through working-capital advantages to one where marketplace development required substantial upfront investment.</div></section>
+<section class="section"><div class="num">08 · THE STAYZILLA TRAP</div><h2>When a marketplace has to build both sides.</h2>
+<div class="flow"><div class="box">Low marketplace density</div><div class="arr">→</div><div class="box">Need to create supply</div><div class="arr">→</div><div class="box">Need to create demand</div><div class="arr">→</div><div class="box">Higher acquisition cost</div><div class="arr">→</div><div class="box">More capital required</div><div class="arr">→</div><div class="box">Pressure to show growth</div><div class="arr">↺</div></div>
+<p class="lead">Founder Vasupal said the travel marketplace lacked local network effects: Stayzilla could not simply win one city, establish liquidity, and then move to the next. The supply-demand problem was geographically fragmented.</p></section><section class="section">
+<div class="num">09 · THE METRIC TRAP</div>
+<h2>Growth can improve the dashboard while weakening the business underneath.</h2>
+<div class="trap">
+<div class="step"><strong>WHAT RISES</strong>GMV, room-nights, listings, towns and headline network size.</div>
+<div class="step"><strong>WHAT CAN HIDE</strong>Cost to activate supply, cost to create demand, local liquidity and repeat behaviour.</div>
+<div class="step"><strong>WHAT DETERIORATES</strong>Contribution, cash conversion and the ability to fund growth internally.</div>
+<div class="step"><strong>THE DECISION</strong>Stop asking “Are we bigger?” and ask “Does each increment of growth make the business stronger?”</div>
+</div>
+<div class="callout"><strong>Failure Lab interpretation:</strong> GMV is not useless. Room-nights are not useless. They become dangerous when they are allowed to substitute for the financial metrics that determine whether the marketplace can keep operating.</div>
+</section>
+<section class="section"><div class="num">10 · FAILURE CHAIN</div><h2>How the problem became fatal.</h2>
+<div class="chain"><div class="chainitem">Homestay category is still immature in many locations</div><div class="chainarrow">↓</div><div class="chainitem">Stayzilla must educate hosts and travellers at the same time</div><div class="chainarrow">↓</div><div class="chainitem">Marketplace-building costs rise faster than commission revenue</div><div class="chainarrow">↓</div><div class="chainitem">Growth becomes increasingly dependent on external capital</div><div class="chainarrow">↓</div><div class="chainitem">Competitive discounting makes recovery harder</div><div class="chainarrow">↓</div><div class="chainitem">Cash-flow and working-capital pressure increase</div><div class="chainarrow">↓</div><div class="chainitem">The company pauses the consumer business and attempts a reboot</div><div class="chainarrow">↓</div><div class="chainitem">A vendor-payment dispute becomes part of the insolvency story</div></div></section><section class="section">
+<div class="num">11 · WHAT COMPETITION DID — AND DID NOT DO</div>
+<h2>Competition was an amplifier, not a complete explanation.</h2>
+<div class="grid2">
+<div class="card"><h3>What the evidence supports</h3><p>Stayzilla operated in a market where large travel platforms and later accommodation specialists increased pressure on customer acquisition, pricing and visibility. Competition made an already capital-intensive marketplace harder to fund.</p></div>
+<div class="card"><h3>What we should not claim</h3><p>It is too simple to say “OYO beat Stayzilla.” The founder's own post-mortem focused on the company's changing financial discipline and the cost of creating supply and demand. Competition belongs in the causal chain, but it should not replace the underlying business-model analysis.</p></div>
+</div>
+</section>
+<section class="section"><div class="num">12 · THE SMALLEST USEFUL UNIT</div><h2>Don't measure the marketplace only in room-nights.</h2>
+<div class="grid3"><div class="card"><h3>Per booking</h3><p>Commission earned minus payment processing, support, discounts and booking-linked service costs.</p></div><div class="card"><h3>Per location</h3><p>Bookings generated from a town versus the full cost of building and maintaining supply and demand there.</p></div><div class="card"><h3>Per cohort</h3><p>Repeat booking and contribution from acquired travellers versus the cost to acquire and activate them.</p></div></div>
+<div class="note"><strong>Control rule:</strong> A marketplace should have a clear answer to “If we stop adding capital, which locations or customer cohorts still generate cash?”</div></section>
+<section class="section"><div class="num">13 · WARNING SIGNALS</div><h2>What should have triggered a stop-and-review?</h2>
+<div class="grid2"><div class="card"><h3>1. Growth metrics outrun cash metrics</h3><p><strong>Signal:</strong> GMV, room-nights and listings rise while operating cash generation deteriorates.</p><p><strong>Action:</strong> Board review of contribution and working-capital bridge every month.</p></div><div class="card"><h3>2. Each new town needs fresh demand creation</h3><p><strong>Signal:</strong> No repeatable local liquidity playbook.</p><p><strong>Action:</strong> Set a town-level payback gate before expansion.</p></div><div class="card"><h3>3. Funding becomes part of the operating model</h3><p><strong>Signal:</strong> Base plan assumes another round to sustain ordinary operations.</p><p><strong>Action:</strong> Maintain a no-new-funding survival plan and a hard cash runway floor.</p></div><div class="card"><h3>4. Vendor obligations become fragile</h3><p><strong>Signal:</strong> Disputed or overdue invoices begin threatening continuity.</p><p><strong>Action:</strong> Maintain an aged-payables dashboard and a formal dispute/settlement process.</p></div></div></section>
+<section class="section"><div class="num">14 · EARLY-WARNING LOOP</div><h2>Turn the lesson into a management system.</h2>
+<div class="flow"><div class="box">Measure town-level contribution</div><div class="arr">→</div><div class="box">Compare against cash burn</div><div class="arr">→</div><div class="box">Forecast 13-week liquidity</div><div class="arr">→</div><div class="box">Freeze weak expansion</div><div class="arr">→</div><div class="box">Reallocate capital to proven liquidity</div><div class="arr">→</div><div class="box">Re-test</div><div class="arr">↺</div></div></section>
+<section class="section"><div class="num">15 · WHO SHOULD HAVE ACTED?</div><h2>Different people owned different warning signs.</h2>
+<div class="grid3"><div class="card"><h3>Management</h3><p>Keep cash flow and working capital beside growth metrics; stop geographic expansion when unit-level liquidity fails.</p></div><div class="card"><h3>Board / investors</h3><p>Ask what happens if the next funding round is delayed by 12 months. Growth plans should survive that question.</p></div><div class="card"><h3>Finance / operations</h3><p>Make overdue vendors, refunds, receivables and cash runway visible before they become shutdown problems.</p></div></div></section>
+<section class="section"><div class="num">16 · COULD STAYZILLA HAVE BEEN SAVED?</div><h2>Possibly — but not by simply raising more money.</h2>
+<p class="lead">This is counterfactual analysis, not a historical fact. More capital could have extended runway, but the founder's own account suggests the core problem was that the marketplace required heavy investment to create liquidity and had moved away from its earlier cash-flow discipline.</p>
+<div class="grid2"><div class="card"><h3>Earlier intervention</h3><p>Freeze expansion into low-density towns. Focus on a smaller set of locations where supply and demand can become liquid without continuously buying both sides.</p><p><strong>Possible decision rule:</strong> reopen expansion only after a cohort of locations demonstrates repeatable contribution and improving cash conversion.</p></div><div class="card"><h3>Harder intervention</h3><p>Redesign the business around positive contribution and working-capital discipline, even if that means becoming a much smaller company.</p><p><strong>Possible decision rule:</strong> choose a smaller business that can survive without assuming another funding round.</p></div></div></section>
+<section class="section"><div class="num">17 · STAKEHOLDER IMPACT</div><h2>The failure did not end with the app.</h2>
+<div class="grid3"><div class="card"><h3>Employees</h3><p>The February 2017 shutdown meant a large team was let go; contemporary reports put the workforce around 200–210 at the time.</p></div><div class="card"><h3>Vendors</h3><p>Payment disputes became central to the shutdown aftermath. The Jigsaw claim was ₹1.69–1.72 crore in contemporary reports; the parties disputed the underlying invoice.</p></div><div class="card"><h3>Investors</h3><p>About $34M had been raised. Existing investors later described the final funding as a last attempt to keep the company afloat.</p></div></div>
+<div class="note"><strong>Important distinction:</strong> NCLT later admitted insolvency on the basis of a vendor claim. That legal outcome does not prove that the vendor dispute caused the original operating failure. The operating model had already been suspended months earlier.</div></section>
+<section class="section"><div class="num">18 · CURRENT STATUS</div><h2>The original company is in liquidation.</h2>
+<div class="twocol"><div class="card"><h3>What is verified</h3><p>Inasra Technologies entered CIRP on <strong>15 September 2017</strong>. NCLT ordered liquidation on <strong>26 September 2018</strong>, and IBBI records the company as defunct with no resolution plans.</p><p>As of 2026, NCLT records still show proceedings connected to the company, while the corporate debtor remains in liquidation.</p></div><div class="card"><h3>What not to say</h3><p>Do not say “Stayzilla disappeared because of one unpaid advertising bill.” The consumer business had already been suspended in February 2017. The later vendor dispute and insolvency process were part of the aftermath.</p></div></div>
+<p class="source">Sources: <a href="https://ibbi.gov.in/uploads/whatsnew/53bd5ac6197fde3b3bcb597656ee1e8d.pdf">IBBI insolvency table</a> · <a href="https://nclt.gov.in/case-details?bench=Y2hlbm5haQ%3D%3D&amp;filing_no=MzMwNTExODAwMDM2MjAxNw%3D%3D">NCLT case record</a> · <a href="https://www.business-standard.com/article/companies/nclt-dismisses-stayzilla-appeal-against-insolvency-process-117101700883_1.html">Business Standard</a></p></section>
+<section class="section"><div class="num">19 · FAILURE TREE</div><h2>One root problem, several branches.</h2>
+<div class="chain"><div class="chainitem"><strong>ROOT:</strong> The marketplace required substantial spending to create liquidity across a fragmented geography.</div><div class="chainarrow">↓</div><div class="chainitem">No strong local network effect → supply and demand both need to be built</div><div class="chainarrow">↓</div><div class="chainitem">Growth spending + discount pressure → weak recovery of acquisition investment</div><div class="chainarrow">↓</div><div class="chainitem">Funding dependence → lower resilience when new capital becomes harder to secure</div><div class="chainarrow">↓</div><div class="chainitem">Cash / working-capital stress → shutdown, vendor disputes and insolvency</div></div></section>
+<section class="section"><div class="num">20 · TOMORROW TEST</div>
+<h2>If you were starting this business tomorrow, what would you check so you don't repeat this mistake?</h2><div class="grid2">
+<div class="card"><h3>Before opening a new market</h3><p>Can one town reach liquidity without permanently subsidising both sides?</p><p>What is the expected payback period for supply creation and customer acquisition?</p><p><strong>Gate:</strong> expansion requires a defined path to contribution-positive local economics.</p></div>
+<div class="card"><h3>Before raising the next round</h3><p>Can the company survive 12 months without new funding?</p><p>Which metrics are cash metrics, and which are only activity metrics?</p><p><strong>Gate:</strong> the base plan must include a survival case with no new funding.</p></div>
+<div class="card"><h3>Every month</h3><p>What is contribution per booking, per town and per customer cohort?</p><p>How much cash is tied up in receivables, refunds and unpaid vendor obligations?</p><p><strong>Gate:</strong> review contribution, cash conversion and working-capital movement by town and customer cohort.</p></div>
+<div class="card"><h3>When the numbers deteriorate</h3><p>Who has authority to freeze expansion?</p><p>What exact threshold forces the company to shrink rather than raise?</p><p><strong>Gate:</strong> assign an owner and pre-agreed trigger for freezing expansion.</p></div>
+</div></section>
+<section class="section"><div class="num">21 · EVIDENCE &amp; SOURCES</div><h2>What this case is based on.</h2>
+<div class="card"><p><strong>Primary / company:</strong> Yogendra Vasupal's Feb 2017 Stayzilla post-mortem and shutdown announcement.</p><p><strong>Contemporaneous reporting:</strong> Economic Times, Business Standard, YourStory, Moneycontrol, Times of India and Forbes India.</p><p><strong>Academic interpretation:</strong> University of Manchester research on failure in the sharing economy, which uses Stayzilla as a case of marketplace development costs and declining users.</p><p><strong>Legal / status:</strong> NCLT and IBBI records for CIRP and liquidation.</p><p><strong>Important evidence boundary:</strong> Claims made by the founder about strategy and internal metrics are labelled as founder explanations. The Jigsaw invoice dispute is presented as a disputed claim, not as a proven fraud finding.</p></div>
+<div class="source"><a href="https://medium.com/stayzilla/stayzilla-will-reboot-its-operations-5cc5b854b368">Founder post-mortem</a> · <a href="https://economictimes.indiatimes.com/small-biz/startups/stayzilla-suspends-operations-to-reboot-with-new-business-model/articleshow/57320857.cms">Economic Times</a> · <a href="https://www.business-standard.com/article/companies/full-text-stayzilla-ceo-explains-why-he-has-to-shut-shop-and-reboot-117022400309_1.html">Business Standard</a> · <a href="https://www.moneycontrol.com/news/business/companies/why-stayzillas-investors-did-not-bail-ceo-out-by-settlement-with-vendor-2271361.html">Moneycontrol</a> · <a href="https://research.manchester.ac.uk/files/78788183/2017_T_uscher_Kietzmann_Learning_from_Failures_in_the_Sharing_Economy.pdf">University of Manchester research</a> · <a href="https://nclt.gov.in/case-details?bench=Y2hlbm5haQ%3D%3D&amp;filing_no=MzMwNTExODAwMDM2MjAxNw%3D%3D">NCLT</a> · <a href="https://ibbi.gov.in/uploads/whatsnew/53bd5ac6197fde3b3bcb597656ee1e8d.pdf">IBBI</a></div>
+</section>
+</main>
+<footer class="wrap" style="padding:40px 24px 70px;color:var(--muted);font-size:13px">Failure Lab · Case #005 · Stayzilla</footer>
+</body>
+</html>
