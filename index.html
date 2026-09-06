@@ -1,153 +1,354 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Failure Lab — Learn Before You Build</title>
-<meta name="description" content="Real business failure stories, explained simply: what happened, what went wrong, what was visible early, and what you should check before starting a similar business.">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Failure Lab — Business Failure Stories</title>
+  <meta name="description" content="Failure Lab studies how businesses fail, the warning signs they missed, and what you can check before making the same mistake.">
+  <style>
+    :root{
+      --bg:#f7f4ee;
+      --paper:#fffdf8;
+      --ink:#171717;
+      --muted:#68645c;
+      --line:#d9d2c5;
+      --accent:#d85b3f;
+      --accent-dark:#a83d29;
+      --soft:#eee8dc;
+      --shadow:0 14px 35px rgba(34,28,20,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.55;
+    }
+    a{color:inherit}
+    .wrap{width:min(1120px,calc(100% - 40px));margin:auto}
+    header{
+      border-bottom:1px solid var(--line);
+      background:rgba(247,244,238,.92);
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(12px);
+    }
+    nav{
+      min-height:70px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+    .brand{
+      text-decoration:none;
+      font-weight:850;
+      letter-spacing:-.04em;
+      font-size:1.15rem;
+    }
+    .brand span{color:var(--accent)}
+    .nav-note{font-size:.86rem;color:var(--muted)}
+    .hero{
+      padding:82px 0 55px;
+      max-width:900px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--accent-dark);
+      margin-bottom:18px;
+    }
+    .eyebrow::before{
+      content:"";
+      width:24px;
+      height:2px;
+      background:var(--accent);
+      display:inline-block;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(3rem,7vw,5.9rem);
+      line-height:.94;
+      letter-spacing:-.065em;
+      max-width:850px;
+    }
+    .hero p{
+      margin:27px 0 0;
+      max-width:720px;
+      color:#4f4b44;
+      font-size:1.15rem;
+    }
+    .hero-question{
+      margin-top:25px;
+      display:inline-block;
+      padding:15px 18px;
+      border-left:4px solid var(--accent);
+      background:var(--paper);
+      font-weight:700;
+      max-width:760px;
+    }
+    .library-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:25px;
+      padding:20px 0 18px;
+      border-bottom:1px solid var(--line);
+    }
+    .library-head h2{margin:0;font-size:2rem;letter-spacing:-.04em}
+    .count{color:var(--muted);font-size:.9rem}
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:24px 0 30px;
+    }
+    .search{
+      flex:1 1 260px;
+      min-width:240px;
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:999px;
+      padding:12px 17px;
+      font:inherit;
+      outline:none;
+    }
+    .search:focus{border-color:var(--accent)}
+    .filter{
+      border:1px solid var(--line);
+      background:transparent;
+      border-radius:999px;
+      padding:10px 15px;
+      font:inherit;
+      cursor:pointer;
+    }
+    .filter.active,.filter:hover{
+      background:var(--ink);
+      color:white;
+      border-color:var(--ink);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:20px;
+      padding-bottom:80px;
+    }
+    .card{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:25px;
+      min-height:285px;
+      display:flex;
+      flex-direction:column;
+      box-shadow:var(--shadow);
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 42px rgba(34,28,20,.12);
+    }
+    .case-no{
+      color:var(--accent-dark);
+      font-size:.76rem;
+      font-weight:850;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .card h3{
+      margin:11px 0 8px;
+      font-size:1.75rem;
+      letter-spacing:-.045em;
+    }
+    .card .type{color:var(--muted);font-size:.88rem}
+    .card p{color:#4f4b44;margin:18px 0}
+    .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:10px}
+    .tag{
+      font-size:.74rem;
+      padding:5px 9px;
+      border-radius:999px;
+      background:var(--soft);
+      color:#575149;
+    }
+    .read{
+      margin-top:20px;
+      text-decoration:none;
+      font-weight:800;
+      color:var(--accent-dark);
+    }
+    .empty{
+      grid-column:1/-1;
+      padding:45px 20px;
+      text-align:center;
+      border:1px dashed var(--line);
+      border-radius:var(--radius);
+      color:var(--muted);
+      display:none;
+    }
+    .principle{
+      background:var(--ink);
+      color:#fff;
+      padding:58px 0;
+    }
+    .principle-inner{
+      display:grid;
+      grid-template-columns:1fr 1.5fr;
+      gap:50px;
+      align-items:start;
+    }
+    .principle h2{font-size:2.3rem;line-height:1.05;letter-spacing:-.045em;margin:0}
+    .principle p{margin:0;color:#d9d5ce;font-size:1.05rem}
+    footer{
+      padding:28px 0;
+      color:var(--muted);
+      font-size:.85rem;
+    }
+    @media(max-width:800px){
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .principle-inner{grid-template-columns:1fr}
+    }
+    @media(max-width:560px){
+      .wrap{width:min(100% - 28px,1120px)}
+      .hero{padding-top:55px}
+      .grid{grid-template-columns:1fr}
+      .nav-note{display:none}
+      h1{font-size:3.25rem}
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="brand" href="./">Failure<span>Lab</span></a>
+        <div class="nav-note">Real businesses · Real warning signs · Practical lessons</div>
+      </nav>
+    </div>
+  </header>
 
-<header>
-  <div class="wrap top">
-    <a class="brand" href="index.html">Failure<span>Lab</span></a>
-    <div class="navlinks">
-      <a href="#cases">Cases</a>
-      <a href="#patterns">Patterns</a>
-      <a href="#tomorrow">Tomorrow Test</a>
-      <a href="#method">How we research</a>
-    </div>
-  </div>
-</header>
-
-<main>
-  <section class="hero wrap">
-    <span class="eyebrow">Learn before you build</span>
-    <h1>What if we studied failure before making the same mistake?</h1>
-    <p>
-      Real business stories. Explained simply. We follow what happened, find the first warning signs,
-      understand why the problem grew, and finish with one practical question:
-      <strong>If you were starting this business tomorrow, what would you check?</strong>
-    </p>
-    <div class="hero-actions">
-      <a class="btn primary" href="#cases">Explore the cases</a>
-      <a class="btn secondary" href="#method">Our approach</a>
-    </div>
-  </section>
-
-  <section id="cases" class="wrap">
-    <div class="section-head">
-      <h2>Failure stories</h2>
-      <p>This is the library. Each case is a permanent page, researched and written in plain English.</p>
-    </div>
-    <div class="grid">
-      <a class="card" href="cases/dunzo/index.html">
-        <span class="tag">Case #001</span>
-        <h3>Dunzo</h3>
-        <p>A useful local-delivery business moved into a much harder game — quick commerce. What that move actually cost, and where the warning signs were.</p>
-      </a>
-      <article class="card">
-        <span class="tag">Near failure</span>
-        <h3>Companies that almost died</h3>
-        <p>Sometimes the best lesson comes from a business that spotted the problem in time and changed course. Coming soon.</p>
-      </article>
-      <article class="card">
-        <span class="tag">India + Global</span>
-        <h3>Not just startups</h3>
-        <p>Startups, family businesses, manufacturing, retail, restaurants, export, logistics and established companies. Coming soon.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="wrap">
-    <div class="section-head">
-      <h2>How a case should feel</h2>
-      <p>It can be a conversation between two people, or simply an easy-to-follow story. The goal is understanding, not performance.</p>
-    </div>
-    <div class="chat">
-      <div class="bubble">
-        <div class="who">Friend A</div>
-        <p>Wait. They had customers and were growing. So how did they still fail?</p>
-      </div>
-      <div class="bubble alt">
-        <div class="who">Friend B</div>
-        <p>That's the interesting part. The company didn't suddenly fail. There were clues earlier. Let's go back and find them.</p>
-      </div>
-      <div class="bubble alt">
-        <div class="who">Friend B</div>
-        <p>Here's the simple version: they were getting more sales, but each sale was making the business weaker.</p>
-      </div>
-      <div class="bubble">
-        <div class="who">Friend A</div>
-        <p>So growing faster was actually making the problem bigger?</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="patterns" class="wrap">
-    <div class="section-head">
-      <h2>Look for the pattern</h2>
-      <p>One failure is a story. Many failures start showing us patterns we can recognize elsewhere.</p>
-    </div>
-    <div class="principles">
-      <div class="principle"><strong>Market</strong>Did enough people actually want this?</div>
-      <div class="principle"><strong>Money</strong>Did each sale help the business or hurt it?</div>
-      <div class="principle"><strong>Cash flow</strong>Could the business survive the gap between paying bills and getting paid?</div>
-      <div class="principle"><strong>People</strong>Were the founders, leaders and key hires working well together?</div>
-      <div class="principle"><strong>Operations</strong>Could the business actually deliver what it promised?</div>
-      <div class="principle"><strong>Strategy</strong>Did the company grow or change direction before the basics were working?</div>
-    </div>
-  </section>
-
-  <section id="tomorrow" class="wrap">
-    <div class="tomorrow">
-      <span class="eyebrow">The bottom line</span>
-      <h2 style="margin-top:16px">If you were starting this business tomorrow...</h2>
-      <p>Every case ends here. Not with a vague lesson, but with things you could actually check before putting your time or money into a similar business.</p>
-      <div class="checks">
-        <div class="check">☐ Who is the real paying customer?</div>
-        <div class="check">☐ Why will they keep buying?</div>
-        <div class="check">☐ What do I actually make from one sale?</div>
-        <div class="check">☐ What happens if sales are much lower than expected?</div>
-        <div class="check">☐ Where could cash get stuck?</div>
-        <div class="check">☐ What warning sign would make me stop?</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="method" class="wrap">
-    <div class="method">
-      <div>
-        <h2>Simple to read. Serious underneath.</h2>
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <div class="eyebrow">Business failure, explained</div>
+        <h1>Learn how businesses fail before you have to learn it the hard way.</h1>
         <p>
-          The writing is friendly, but the research is not casual.
-          We separate what we know from what we think.
+          Failure Lab takes real businesses — startups, small businesses, growing companies
+          and large corporations — and pulls apart what actually went wrong.
         </p>
-        <ul>
-          <li>Verify important facts from credible sources.</li>
-          <li>Build the timeline before explaining the failure.</li>
-          <li>Separate the final symptom from the deeper cause.</li>
-          <li>Look for warning signs that were genuinely visible at the time.</li>
-          <li>Do not turn hindsight into certainty.</li>
-          <li>Clearly label uncertainty when the evidence is incomplete.</li>
-        </ul>
-      </div>
-      <div class="note">
-        <strong>One rule we protect.</strong>
-        <p>We won't write a founder's story as if we already knew the ending. A failure page should help the reader understand what someone could reasonably have known and checked at the time.</p>
-      </div>
+        <div class="hero-question">
+          The question behind every case: <em>If you were starting this business tomorrow,
+          what would you check so you don't repeat this mistake?</em>
+        </div>
+      </section>
+
+      <section id="cases">
+        <div class="library-head">
+          <h2>Failure Stories</h2>
+          <div class="count" id="caseCount">1 case</div>
+        </div>
+
+        <div class="controls">
+          <input id="search" class="search" type="search" placeholder="Search a business or failure pattern…">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="startup">Startups</button>
+          <button class="filter" data-filter="small-business">Small business</button>
+          <button class="filter" data-filter="large-company">Large companies</button>
+          <button class="filter" data-filter="near-failure">Near-failures</button>
+        </div>
+
+        <div class="grid" id="caseGrid">
+          <article class="card"
+            data-type="startup"
+            data-search="dunzo startup growth unit economics cash burn expansion competition governance funding">
+            <div class="case-no">Case #001</div>
+            <h3>Dunzo</h3>
+            <div class="type">Startup → scale-up</div>
+            <p>
+              Rapid growth, aggressive expansion, rising costs and a business model
+              that struggled to make the economics work at scale.
+            </p>
+            <div class="tags">
+              <span class="tag">Unit economics</span>
+              <span class="tag">Cash burn</span>
+              <span class="tag">Expansion</span>
+              <span class="tag">Governance</span>
+            </div>
+            <a class="read" href="cases/dunzo/">Read the Dunzo case →</a>
+          </article>
+
+          <div class="empty" id="emptyState">
+            No case matches that search yet.
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
-</main>
 
-<footer>
-  <div class="wrap">
-    <strong>Failure Lab</strong> — Study failure. Spot the warning signs. Build better.
-    <br><br>
-    v0.2 — one live case (Dunzo). Future cases follow the same template.
-  </div>
-</footer>
+    <section class="principle">
+      <div class="wrap principle-inner">
+        <h2>Failure isn't usually one big mistake.</h2>
+        <p>
+          A business can look healthy while several small problems are quietly stacking up.
+          We follow the chain: <strong>signal → warning → decision → consequence</strong>.
+          Then we turn the lesson into something you can actually check in your own business.
+        </p>
+      </div>
+    </section>
+  </main>
 
+  <footer>
+    <div class="wrap">
+      Failure Lab · A practical learning library about business failure.
+    </div>
+  </footer>
+
+  <script>
+    const cards = [...document.querySelectorAll('.card')];
+    const search = document.getElementById('search');
+    const empty = document.getElementById('emptyState');
+    const count = document.getElementById('caseCount');
+    const filters = [...document.querySelectorAll('.filter')];
+    let activeFilter = 'all';
+
+    function render() {
+      const q = search.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const matchesFilter =
+          activeFilter === 'all' || card.dataset.type === activeFilter;
+        const matchesSearch =
+          !q || card.dataset.search.includes(q) ||
+          card.querySelector('h3').textContent.toLowerCase().includes(q);
+
+        const show = matchesFilter && matchesSearch;
+        card.style.display = show ? 'flex' : 'none';
+        if (show) visible++;
+      });
+
+      empty.style.display = visible ? 'none' : 'block';
+      count.textContent = `${visible} ${visible === 1 ? 'case' : 'cases'}`;
+    }
+
+    filters.forEach(button => {
+      button.addEventListener('click', () => {
+        filters.forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        activeFilter = button.dataset.filter;
+        render();
+      });
+    });
+
+    search.addEventListener('input', render);
+    render();
+  </script>
 </body>
 </html>
