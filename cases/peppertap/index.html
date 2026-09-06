@@ -73,11 +73,7 @@ p{max-width:780px;color:#4e4a43}
 .event{display:grid;grid-template-columns:105px 1fr;gap:20px;padding:20px 0;border-top:1px solid var(--line)}
 .event:first-child{border-top:0}
 .year{font-weight:900;color:var(--red)}
-.chain{display:grid;gap:0;margin-top:30px}
-.chain div{background:var(--paper);border:1px solid var(--line);padding:15px 18px;position:relative}
-.chain div:not(:last-child)::after{content:"↓";position:absolute;left:50%;bottom:-18px;z-index:2;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:var(--accent);font-weight:900}
-.chain div:not(:last-child){margin-bottom:20px}
-.chain strong{display:block}
+.chain{display:flex;flex-direction:column;gap:0;margin:28px 0 0;max-width:900px}.chain .node{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:17px 19px;position:relative;box-shadow:var(--shadow)}.chain .node strong{display:block;margin-bottom:4px}.chain-arrow{height:30px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:900;font-size:1.25rem;line-height:1}.chain-arrow::before{content:"";display:none}
 .econ{overflow:auto;margin-top:24px}
 .econ table,.warning-table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -99,7 +95,10 @@ footer{padding:40px 0;color:var(--muted);font-size:.85rem}
 
 
 /* PepperTap case additions */
-.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin:22px 0}.flow .step{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px;text-align:center;font-weight:800;box-shadow:var(--shadow)}.flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:900;font-size:1.3rem}.chain{display:flex;flex-direction:column;gap:10px;margin:22px 0}.chain .node{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 18px}.chain .node strong{display:block}.chain .arrow{text-align:center;color:var(--accent);font-weight:900}.metric{font-size:2rem;font-weight:900;letter-spacing:-.05em}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}.gallery figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}.gallery img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}.gallery figcaption{padding:13px 15px;font-size:.88rem;color:var(--muted)}.gallery a{color:var(--accent);font-weight:800}.callout{background:var(--accent2);border-left:5px solid var(--accent);padding:20px;border-radius:14px;margin:22px 0}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;background:var(--paper);border-radius:14px;overflow:hidden}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table-wrap th{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:var(--accent2);font-size:.75rem;font-weight:800;margin:3px 4px 3px 0}@media(max-width:760px){.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.gallery{grid-template-columns:1fr}}</style></head><body>
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin:22px 0}.flow .step{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px;text-align:center;font-weight:800;box-shadow:var(--shadow)}.flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:900;font-size:1.3rem}.metric{font-size:2rem;font-weight:900;letter-spacing:-.05em}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}.gallery figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}.gallery img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}.gallery figcaption{padding:13px 15px;font-size:.88rem;color:var(--muted)}.gallery a{color:var(--accent);font-weight:800}.callout{background:var(--accent2);border-left:5px solid var(--accent);padding:20px;border-radius:14px;margin:22px 0}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;background:var(--paper);border-radius:14px;overflow:hidden}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table-wrap th{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:var(--accent2);font-size:.75rem;font-weight:800;margin:3px 4px 3px 0}@media(max-width:760px){.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.gallery{grid-template-columns:1fr}}
+/* Final layout hardening */
+html,body{max-width:100%;overflow-x:hidden}.wrap{min-width:0}.box,.chain,.flow,.journey,.finance-grid,.save-grid,.failure-tree,.table-wrap{min-width:0}.flow{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr)}.flow .step{min-width:0}.flow .arrow{min-width:28px}.journey{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr)}@media(max-width:900px){.flow{grid-template-columns:1fr}.flow .arrow{height:28px;transform:rotate(90deg)}.journey{grid-template-columns:1fr}.journey .arrow{height:28px;transform:rotate(90deg)}}
+</style></head><body>
 <header><div class="wrap"><nav><a class="brand" href="../../index.html">Failure<span>Lab</span></a><a class="back" href="../../index.html">← Case library</a></nav></div></header>
 <main>
 <div class="wrap">
@@ -181,17 +180,17 @@ footer{padding:40px 0;color:var(--muted);font-size:.85rem}
 <p>PepperTap's own post-mortem, reported at the time, pointed to three major problems: deep discounting, scaling faster than its operating processes could support, and the high cost of maintaining supply. It also faced difficult store-integration and inventory-data problems.</p>
 <div class="chain">
 <div class="node"><strong>1. Customer acquisition needed discounts</strong>Groceries are a low-margin category, so large discounts were expensive to fund.</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>2. Every order still needed delivery capacity</strong>Drivers and delivery infrastructure had to be ready even when orders were uneven.</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>3. Partner-store data was difficult</strong>Inventory and catalogue information from stores had to be integrated and updated; the company described this as a major operational challenge.</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>4. Negative economics persisted</strong>Founder Navneet Singh later said PepperTap was operating on a negative margin per delivery and that profitability looked distant.</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>5. Scaling multiplied the problem</strong>More cities meant more stores, people, delivery capacity and operational complexity.</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>6. The funding environment changed</strong>Once investors became less willing to fund businesses that were losing money on each order, the ability to outspend the problem disappeared.</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>7. The business pulled back and then stopped</strong>After city closures and further deterioration, PepperTap shut the consumer grocery operation and pivoted to logistics.</div>
 </div>
 </section>
@@ -283,17 +282,17 @@ footer{padding:40px 0;color:var(--muted);font-size:.85rem}
 <h2>The whole story in one picture</h2>
 <div class="chain">
 <div class="node"><strong>PEPPERTAP FAILURE</strong>Fast expansion + weak order economics</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>Demand acquisition</strong>Heavy discounts and promotions</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>Operating burden</strong>Delivery capacity + store integration + service promise</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>Negative contribution</strong>More volume did not reliably create more economic value</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>Scale multiplied the problem</strong>More cities created more complexity and cash requirements</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>Funding becomes a constraint</strong>The model could no longer assume endless external capital</div>
-<div class="arrow">↓</div>
+<div class="chain-arrow" aria-hidden="true">↓</div>
 <div class="node"><strong>Retrenchment → shutdown</strong>City closures → consumer grocery shutdown → logistics pivot</div>
 </div>
 </section>
