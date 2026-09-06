@@ -1,191 +1,527 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Failure Lab — Dunzo</title>
-<meta name="description" content="Case #001: How Dunzo moved from local delivery into quick commerce, why the economics broke, and what to check before making a similar move.">
-<link rel="stylesheet" href="../../css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dunzo — Failure Lab Case #001</title>
+<meta name="description" content="Dunzo: a Failure Lab case study on growth, unit economics, expansion, funding and early warning signs.">
+<style>
+:root{
+  --bg:#f7f4ee;--paper:#fffdf8;--ink:#171717;--muted:#6a655d;--line:#d9d2c5;
+  --accent:#d85b3f;--accent2:#f0e4d8;--dark:#20201f;--green:#48684d;--red:#a83d29;
+  --shadow:0 12px 32px rgba(30,25,18,.07);--r:18px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+a{color:inherit}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);background:rgba(247,244,238,.94);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}
+nav{min-height:68px;display:flex;justify-content:space-between;align-items:center}
+.brand{text-decoration:none;font-weight:900;letter-spacing:-.04em}.brand span{color:var(--accent)}
+.back{font-size:.88rem;color:var(--muted);text-decoration:none}.back:hover{color:var(--accent)}
+.hero{padding:70px 0 45px}
+.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;font-weight:850;color:var(--red)}
+.hero h1{font-size:clamp(3.2rem,8vw,6.4rem);line-height:.88;letter-spacing:-.07em;margin:15px 0 18px}
+.subtitle{font-size:1.25rem;max-width:760px;color:#4e4a43}
+.factbar{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.pill{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 12px;font-size:.8rem;color:#565149}
+.warning{margin:25px 0 55px;padding:22px 24px;background:var(--accent2);border-left:5px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+.warning strong{display:block;margin-bottom:4px}
+section{padding:55px 0;border-top:1px solid var(--line)}
+.kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;font-weight:900;color:var(--red);margin-bottom:9px}
+h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1;letter-spacing:-.055em;margin:0 0 18px}
+h3{font-size:1.3rem;letter-spacing:-.025em;margin:0 0 9px}
+p{max-width:780px;color:#4e4a43}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:23px;box-shadow:var(--shadow)}
+
+.image-grid{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:18px;
+  margin-top:28px;
+}
+.image-card{
+  margin:0;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.image-card img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  display:block;
+}
+.image-card.wide img{height:330px}
+.image-card figcaption{
+  padding:13px 15px 15px;
+  font-size:.82rem;
+  color:var(--muted);
+}
+.image-card figcaption strong{
+  display:block;
+  color:var(--ink);
+  font-size:.9rem;
+  margin-bottom:3px;
+}
+.image-card figcaption a{
+  color:var(--red);
+  text-decoration:none;
+}
+.image-card figcaption a:hover{text-decoration:underline}
+@media(max-width:700px){
+  .image-grid{grid-template-columns:1fr}
+  .image-card img,.image-card.wide img{height:230px}
+}
+
+.timeline{display:grid;gap:0;margin-top:28px}
+.event{display:grid;grid-template-columns:105px 1fr;gap:20px;padding:20px 0;border-top:1px solid var(--line)}
+.event:first-child{border-top:0}
+.year{font-weight:900;color:var(--red)}
+.chain{display:grid;gap:0;margin-top:30px}
+.chain div{background:var(--paper);border:1px solid var(--line);padding:15px 18px;position:relative}
+.chain div:not(:last-child)::after{content:"↓";position:absolute;left:50%;bottom:-18px;z-index:2;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:var(--accent);font-weight:900}
+.chain div:not(:last-child){margin-bottom:20px}
+.chain strong{display:block}
+.econ{overflow:auto;margin-top:24px}
+.econ table,.warning-table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eee8dc;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+tr:last-child td{border-bottom:0}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--dark);color:#fff;padding:20px;border-radius:14px;overflow:auto}
+.alert{border-left:4px solid var(--accent);padding:16px 18px;background:var(--paper);margin:12px 0;border-radius:0 12px 12px 0}
+.alert .metric{font-weight:900}
+.checklist{display:grid;gap:10px;margin-top:22px}
+.check{background:var(--paper);border:1px solid var(--line);padding:14px 16px;border-radius:12px}
+.check::before{content:"□";font-size:1.15rem;margin-right:10px;color:var(--accent);font-weight:900}
+.quote{font-size:1.18rem;font-weight:750;color:var(--ink);border-left:4px solid var(--accent);padding:14px 20px;margin:25px 0;background:var(--paper)}
+.sources a{color:var(--red)}
+footer{padding:40px 0;color:var(--muted);font-size:.85rem}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}.event{grid-template-columns:75px 1fr}.hero h1{font-size:3.6rem}}
+
+.journey{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;gap:10px;align-items:stretch;margin:22px 0}.journey-step{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.journey-step span{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);margin-bottom:10px;font-weight:700}.journey-step.danger{border-color:#d9b4a7}.journey-step h3,.journey-step strong{display:block}.journey-step p{margin:7px 0 0}.arrow{display:flex;align-items:center;justify-content:center;font-size:22px}.finance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.metric-card{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.metric-card.warning{border-color:#d9b4a7}.metric-label{font-size:.82rem;opacity:.7}.metric-value{font-size:1.65rem;font-weight:800;margin:5px 0}.metric-sub{font-size:.85rem;opacity:.72}.bar-chart{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);display:grid;gap:15px}.bar-row{display:grid;grid-template-columns:90px 1fr 125px;gap:10px;align-items:center;font-size:.9rem}.bar-track{height:13px;background:#eee;border-radius:99px;overflow:hidden}.bar{display:block;height:100%;border-radius:99px}.bar.revenue{background:#777}.bar.expense{background:#444}.bar.loss{background:#aaa}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;min-width:760px}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table-wrap th{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}.save-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.save-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.failure-tree{padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:center}.tree-root{display:inline-block;padding:14px 22px;border-radius:12px;border:2px solid #222;font-weight:800}.tree-branches{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.tree-branches div{padding:15px;border:1px solid var(--line);border-radius:12px}.tree-branches strong,.tree-branches span{display:block}.tree-branches span{font-size:.88rem;opacity:.72;margin-top:6px}.tree-arrow{font-size:24px;margin:8px}.tree-middle,.tree-bottom{padding:15px;border-radius:12px;border:1px dashed var(--line);font-weight:600}.tree-bottom{font-weight:500}.note{font-size:.9rem;opacity:.78}
+@media(max-width:900px){.journey{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:24px}.finance-grid,.save-grid,.tree-branches{grid-template-columns:1fr}.bar-row{grid-template-columns:75px 1fr}.bar-row b{grid-column:2;font-size:.8rem}}
+</style>
+
+<style>
+.flow-diagram{margin:28px 0;padding:24px;border:1px solid #dfe4ea;border-radius:18px;background:#fbfcfd}.flow-title{font-size:20px;font-weight:800;margin-bottom:6px}.flow-sub{color:#68707c;margin-bottom:18px}.flow-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}.flow-box{background:#fff;border:1px solid #cfd6df;border-radius:12px;padding:14px 16px;min-width:125px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}.flow-box strong{display:block;margin-bottom:4px}.flow-arrow{font-size:24px;color:#8a929d;font-weight:700}.flow-note{margin-top:18px;padding:14px 16px;border-left:4px solid #333;background:#f2f4f6;border-radius:8px}.warning-loop .flow-box{min-width:150px}.warning-loop .flow-arrow{font-size:22px}@media(max-width:700px){.flow-row{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+</style>
 </head>
 <body>
-<header><div class="wrap top"><a class="brand" href="../../index.html">Failure<span>Lab</span></a><a class="back" href="../../index.html">← Library</a></div></header>
-<main class="wrap">
-<span class="tag pill">Case #001 · India · Delivery / Quick Commerce</span>
+<header><div class="wrap"><nav>
+<a class="brand" href="../../">Failure<span>Lab</span></a>
+<a class="back" href="../../">← All failure stories</a>
+</nav></div></header>
+
+<main>
+<div class="wrap">
+<section class="hero" style="border-top:0">
+<div class="eyebrow">Failure Lab · Case #001</div>
 <h1>Dunzo</h1>
-<p class="lead"><strong>How a useful local-delivery business moved into a much harder game — and what we can learn before making a similar move.</strong></p>
-
-<div class="facts">
-<div class="fact"><small>Started</small><strong>2014</strong></div>
-<div class="fact"><small>Major 2022 raise</small><strong>$200M from Reliance</strong></div>
-<div class="fact"><small>Total raised</small><strong>~$450M reported</strong></div>
-<div class="fact"><small>Later status</small><strong>CIRP began Aug 2025</strong></div>
+<div class="subtitle">A business that looked like it was winning the race — while the economics underneath were becoming harder to defend.</div>
+<div class="factbar">
+<span class="pill">Startup → scale-up</span>
+<span class="pill">Hyperlocal delivery</span>
+<span class="pill">Quick commerce</span>
+<span class="pill">Growth + unit economics</span>
 </div>
-
-<section class="section">
-<h2>First, what actually happened?</h2>
-<div class="chat">
-<div class="bubble"><div class="who">Question</div><p>Was Dunzo a bad business from day one?</p></div>
-<div class="bubble alt"><div class="who">Simple answer</div><p>No. That would be too easy — and probably wrong.</p></div>
-<div class="bubble alt"><div class="who">Let's unpack it</div><p>Dunzo began as a local delivery and "get this for me" service. People knew what it was useful for.</p></div>
-<div class="bubble"><div class="who">Then?</div><p>It moved much harder into quick commerce: groceries, dark stores and very fast delivery.</p></div>
+<div class="warning"><strong>The short version</strong>
+Running out of money was the final crisis. The more useful lesson is the chain that came before it: aggressive expansion, heavy operating costs, difficult unit economics, dependence on fresh funding, and warning signs that eventually became impossible to ignore.
 </div>
-<p>That put Dunzo into a fight with companies that were also spending heavily and expanding quickly. Public reporting describes a combination of aggressive expansion, high cash burn, difficult unit economics, operational problems, fierce competition and a later funding crunch — not one magic mistake.</p>
 </section>
 
-<section class="section">
-<h2>Who loses when a company closes?</h2>
-<div class="grid">
-<div class="mini"><b>Investors</b><p>Shareholders can lose some or all of the money they invested. Reliance Retail, for example, invested $200M and Inc42 reported that it wrote off that investment in January 2025.</p></div>
-<div class="mini"><b>Employees</b><p>They may lose jobs, and sometimes unpaid wages become claims against the company. Former Dunzo employees reported delayed salaries and other unpaid amounts.</p></div>
-<div class="mini"><b>Vendors</b><p>Suppliers, landlords, agencies and other businesses may be owed money. Public reporting described unpaid vendor and advertising dues.</p></div>
-<div class="mini"><b>Customers</b><p>Usually the biggest loss is service: the app disappears, orders stop, warranties/support can become difficult, and prepaid amounts may become claims depending on the situation.</p></div>
-<div class="mini"><b>Lenders</b><p>Debt holders and other financial creditors may try to recover money from the company's remaining assets according to their legal priority.</p></div>
-<div class="mini"><b>Founders</b><p>Founders can lose their equity and reputation, but their personal loss is not automatically the same as the company's debt. Personal liability depends on the contracts and law.</p></div>
-</div>
-<div class="box yellow"><strong>Important:</strong> A company closing does not mean everyone simply "gets their money back." What each person receives depends on the company's assets, liabilities, contracts, security and the legal process.</div>
-<p>In Dunzo's case, this is no longer theoretical: an insolvency process (CIRP) commenced in August 2025, and the Insolvency and Bankruptcy Board of India was publishing creditor claims in 2026.</p>
+<section>
+<div class="kicker">01 · The story</div>
+<h2>First, understand the business.</h2>
+<p>Dunzo began as a hyperlocal service and became one of India's better-known quick-commerce names. By 2022 it had raised a large amount of capital, including a $200 million investment from Reliance Retail, and pushed hard into rapid grocery delivery and expansion.</p>
+<p>That is what makes the case interesting. The problem was not that nobody wanted the service. The harder question was whether the business could deliver that service repeatedly at an economic cost that the company could support.</p>
+<div class="quote">A company can have customers, revenue and a famous investor — and still have a business model that is getting weaker.</div>
 </section>
 
-<section class="section">
-<h2>So where should we have been checking?</h2>
+
+<section>
+<div class="kicker">02 · Know the business</div>
+<h2>Before we talk about the failure, meet Dunzo.</h2>
+<p>If you have never heard of Dunzo, don't worry. Forget the later funding rounds and the quick-commerce race for a moment. Start with the simple idea.</p>
+
+<div class="grid2">
+  <div class="box">
+    <h3>What did Dunzo actually do?</h3>
+    <p>Think of Dunzo as a person you could message and say: <strong>“Can you pick this up and bring it to me?”</strong></p>
+    <p>In its early days, customers could send requests through WhatsApp. Dunzo would help with everyday errands — picking something up, buying something locally, or delivering an item. The basic promise was simple: <strong>save me the trip.</strong></p>
+  </div>
+
+  <div class="box">
+    <h3>Who started it?</h3>
+    <p>Dunzo was founded by <strong>Kabeer Biswas, Ankur Aggarwal, Dalvir Suri and Mukund Jha</strong>.</p>
+    <p>The early story is usually dated to 2014, while some company/startup records use 2015. Rather than pretending those dates mean exactly the same thing, Failure Lab keeps the distinction visible.</p>
+  </div>
+
+  <div class="box">
+    <h3>Where did the idea come from?</h3>
+    <p>The starting problem was ordinary: people spend a surprising amount of time running small errands.</p>
+    <p>The founders explored a simple question: <strong>what if someone else could do those little jobs for you?</strong></p>
+    <p>So the first version was not a giant delivery network. It was a very hands-on service in Bengaluru.</p>
+  </div>
+
+  <div class="box">
+    <h3>What did the first Dunzo look like?</h3>
+    <p>It was much smaller and more manual than the company people later knew.</p>
+    <p>Kabeer initially handled tasks himself. As requests increased, Dunzo brought in part-time help and freelancers. The early service was being worked out in the real world before it became a large technology-and-operations business.</p>
+  </div>
+</div>
+
+<div class="box" style="margin-top:18px">
+  <h3>How did it grow from an idea into a company?</h3>
+  <div class="chain">
+    <div><strong>1. A small everyday problem</strong> “I don't want to spend my time going across the city to get this.”</div>
+    <div><strong>2. A very simple experiment</strong> Customers could message Dunzo through WhatsApp.</div>
+    <div><strong>3. Humans did the work</strong> The founders and early helpers actually completed the errands.</div>
+    <div><strong>4. People started using it</strong> By June 2015, reporting said the team was completing around 70 tasks a day.</div>
+    <div><strong>5. Outside capital arrived</strong> The first reported institutional funding was $650,000 in March 2016.</div>
+    <div><strong>6. The business became more sophisticated</strong> Technology, employees, delivery operations and new business models were added as Dunzo tried to serve a much larger market.</div>
+  </div>
+</div>
+
+<div class="econ" style="margin-top:24px">
+<table>
+<thead><tr><th>Basic fact</th><th>Dunzo in simple terms</th></tr></thead>
+<tbody>
+<tr><td><strong>Started</strong></td><td>2014/15 — the original experiment began before the later corporate-scale business.</td></tr>
+<tr><td><strong>Founders</strong></td><td>Kabeer Biswas, Ankur Aggarwal, Dalvir Suri and Mukund Jha.</td></tr>
+<tr><td><strong>Initial idea</strong></td><td>Help people get everyday errands done locally.</td></tr>
+<tr><td><strong>First customer experience</strong></td><td>Send a request, initially through WhatsApp, and Dunzo arranged the task.</td></tr>
+<tr><td><strong>Initial operation</strong></td><td>Very hands-on and human-assisted rather than a huge automated delivery network.</td></tr>
+<tr><td><strong>Early traction</strong></td><td>Around 70 tasks a day were reported by June 2015.</td></tr>
+<tr><td><strong>First reported institutional funding</strong></td><td>$650,000 in March 2016, from Blume Ventures, Aspada Ventures and angel investors.</td></tr>
+<tr><td><strong>Legal entity</strong></td><td>Dunzo Digital Private Limited.</td></tr>
+<tr><td><strong>Later direction</strong></td><td>Hyperlocal delivery expanded into grocery/quick commerce and a much more capital-intensive operating model.</td></tr>
+<tr><td><strong>Major 2022 funding</strong></td><td>$240 million round, including $200 million from Reliance Retail.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="warning">
+<strong>One important funding distinction</strong>
+The $650,000 figure above is the first reported institutional funding round in 2016. It should <em>not</em> be described as “the founders started the company with $650,000.” The public evidence does not establish that as the founders' original personal capital.
+</div>
+
+<p><small>Basic-history sources for the early Dunzo story include <a href="https://www.forbesindia.com/article/take-one-big-story-of-the-day/from-noun-to-verb-can-dunzo-do-a-zoom/66391/1" target="_blank" rel="noopener">Forbes India</a>, <a href="https://www.forbesindia.com/article/startups/dunzo-googles-chosen-one/49499/1" target="_blank" rel="noopener">Forbes India on early traction</a>, and <a href="https://www.business-standard.com/article/companies/google-backed-dunzo-allows-users-to-buy-pick-up-or-deliver-any-item-118120200633_1.html" target="_blank" rel="noopener">Business Standard</a>. The page distinguishes reported facts from interpretation.</small></p>
+<p><strong>Why this matters:</strong> Dunzo did not begin as “a company that needed hundreds of millions of dollars.” It began as a small service solving a simple problem. The interesting Failure Lab question is how the economics and operating requirements changed as that tiny idea became a much larger business.</p>
+</section>
+
+
+<section>
+<div class="kicker">03 · See the business</div>
+<h2>What Dunzo looked like in the real world</h2>
+<p>These images make the business easier to picture: the people who built it, the delivery operation, the dark-store/fulfilment side, and the scale of the investor story. They are here to give context, not decoration.</p>
+
+<div class="image-grid">
+  <figure class="image-card wide">
+    <img src="https://startupp.in/wp-content/uploads/2024/08/Founders-of-Dunzo-StartupTalky.jpg"
+         alt="Dunzo founders"
+         loading="lazy">
+    <figcaption>
+      <strong>The founding team</strong>
+      A photograph published with a Dunzo startup history feature, showing the co-founders together.
+      <a href="https://startupp.in/startup-story-of-dunzo/" target="_blank" rel="noopener">Image/source →</a>
+    </figcaption>
+  </figure>
+
+  <figure class="image-card">
+    <img src="https://inc42.com/cdn-cgi/image/quality%3D90/https%3A/asset.inc42.com/2023/08/Dunzo-feature-1.png"
+         alt="Dunzo delivery rider with Dunzo backpack"
+         loading="lazy">
+    <figcaption>
+      <strong>The delivery operation</strong>
+      A Dunzo rider with the company's branded delivery equipment.
+      <a href="https://inc42.com/buzz/dunzo-down-several-bengaluru-areas-salaries-delays-off-roll-workers/" target="_blank" rel="noopener">Image/source →</a>
+    </figcaption>
+  </figure>
+
+  <figure class="image-card">
+    <img src="https://media.assettype.com/digitalterminal%2Fimport%2Fuploads%2Fnews%2F1643890634s_Dunzo.jpg?ar=40%3A21&auto=format%2Ccompress&enlarge=true&mode=crop&ogImage=true&overlay=false&overlay_position=bottom&overlay_width=100&w=1200"
+         alt="Dunzo Daily staff packing grocery orders"
+         loading="lazy">
+    <figcaption>
+      <strong>Dunzo Daily / fulfilment</strong>
+      Staff packing grocery orders — useful for visualising the operational side of quick commerce.
+      <a href="https://digitalterminal.in/news/27139.html" target="_blank" rel="noopener">Image/source →</a>
+    </figcaption>
+  </figure>
+
+  <figure class="image-card wide">
+    <img src="https://img.etimg.com/photo/msid-102234432%2Cimgsize-34882/Dunzo%E2%80%99sbusinessplummetsamidseverecashcrunch.jpg"
+         alt="Economic Times chart showing major Dunzo investors"
+         loading="lazy">
+    <figcaption>
+      <strong>The funding story</strong>
+      ETtech's chart showing major Dunzo investors and the capital raised around January 2022.
+      <a href="https://m.economictimes.com/tech/startups/ettech-recap-dunzos-deepening-cash-crunch-in-five-stories/articleshow/102234416.cms" target="_blank" rel="noopener">Image/source →</a>
+    </figcaption>
+  </figure>
+</div>
+
+<div class="warning">
+<strong>Why we use real images</strong>
+A failure story becomes easier to understand when you can see the people, products and operations involved. For every case, we should prefer real, attributable images from credible sources and link back to the source. We should not create artificial “company photos” and present them as historical evidence.
+</div>
+</section>
+
+<section>
+<div class="kicker">04 · Timeline</div>
+<h2>How the situation changed</h2>
 <div class="timeline">
-<div class="event"><div class="year">Phase 1 — Prove one small market</div><p>Can one city, one customer group and one basic service make healthy money without depending on endless funding?</p></div>
-<div class="event"><div class="year">Phase 2 — Prove the unit</div><p>For one order, after delivery, support, discounts, payment costs, wastage and the realistic share of operating costs: are we making money or losing money?</p></div>
-<div class="event"><div class="year">Phase 3 — Prove repeatability</div><p>Does the same model work for 10 stores? If not, opening 100 stores does not magically solve it.</p></div>
-<div class="event"><div class="year">Phase 4 — Expand a city</div><p>Before entering another city, the existing city should hit agreed targets for contribution, repeat customers, delivery density, wastage, cash cycle and service quality.</p></div>
-<div class="event"><div class="year">Phase 5 — Expand nationally</div><p>Only after the economics survive stress tests: lower demand, higher delivery cost, price competition, slower collections and no new funding for 6–12 months.</p></div>
+<div class="event"><div class="year">2014</div><div><h3>Founded</h3><p>Dunzo started as a hyperlocal delivery/concierge business in Bengaluru.</p></div></div>
+<div class="event"><div class="year">2021</div><div><h3>Quick-commerce push</h3><p>Dunzo Daily became a major strategic direction, bringing dark-store economics and faster delivery expectations into the business.</p></div></div>
+<div class="event"><div class="year">Jan 2022</div><div><h3>Big funding round</h3><p>Dunzo raised $240 million, including $200 million from Reliance Retail. The company then pushed aggressively into growth.</p></div></div>
+<div class="event"><div class="year">2022–23</div><div><h3>Expansion meets economics</h3><p>Reporting described high monthly expenses, expansion from roughly seven cities to 15–16, later contraction, layoffs and salary delays.</p></div></div>
+<div class="event"><div class="year">2023</div><div><h3>Cash pressure becomes visible</h3><p>ETtech reported a sharp reduction in Dunzo Daily's scale and a reduction from around 150 dark stores to around seven in Bengaluru, while the company disputed some of the reported numbers.</p></div></div>
+<div class="event"><div class="year">2024</div><div><h3>Governance and funding strain</h3><p>Board and founder departures, difficulty raising more capital and creditor pressure increasingly became part of the story.</p></div></div>
+<div class="event"><div class="year">Jan 2025</div><div><h3>Operations go offline</h3><p>Dunzo's app and website went offline shortly after remaining cofounder Kabeer Biswas left.</p></div></div>
+<div class="event"><div class="year">Aug 2025</div><div><h3>CIRP begins</h3><p>IBBI records show the corporate insolvency resolution process for Dunzo Digital Private Limited was initiated on 6 August 2025.</p></div></div>
 </div>
 </section>
 
-<section class="section">
-<h2>The micro-level dashboard</h2>
-<p>This is the part we add to every relevant case. Instead of only asking "Is the company profitable?", ask whether each layer is healthy.</p>
-<div class="grid">
-<div class="mini"><b>Order</b><p>Revenue per order − product cost − delivery − payment/packing/support − discounts = contribution per order.</p></div>
-<div class="mini"><b>Store / Hub</b><p>Orders × contribution per order − staff − rent − electricity − wastage − local overhead = hub contribution.</p></div>
-<div class="mini"><b>City</b><p>All hubs + city marketing + city staff + delivery operations − city contribution = city result.</p></div>
-<div class="mini"><b>Expansion</b><p>New-city setup cost + monthly burn + working capital. Define the maximum loss allowed before stopping.</p></div>
-<div class="mini"><b>Cash</b><p>Opening cash + collections + funding − salaries − suppliers − rent − taxes − capex − debt = closing cash.</p></div>
-<div class="mini"><b>Runway</b><p>Cash available ÷ monthly net cash burn. Then stress-test it instead of trusting the base forecast.</p></div>
-</div>
-<div class="box red"><strong>Key rule:</strong> Revenue growth should never be the only green light. A business can grow revenue while destroying cash.</div>
-</section>
-
-<section class="section">
-<h2>How do we know whether a new city is ready?</h2>
-<div class="checks">
-<div class="check">☐ Existing city has positive contribution after real operating costs.</div>
-<div class="check">☐ Customer repeat rate is strong enough to avoid buying every order.</div>
-<div class="check">☐ Orders are dense enough for efficient routes.</div>
-<div class="check">☐ Delivery cost per order is within the target.</div>
-<div class="check">☐ Inventory / wastage is controlled.</div>
-<div class="check">☐ Supplier payment cycle and customer cash cycle are understood.</div>
-<div class="check">☐ New city has a conservative 6–12 month cash plan.</div>
-<div class="check">☐ There is a stop rule before expansion begins.</div>
-</div>
-</section>
-
-<section class="section">
-<h2>Risks → early warning → action</h2>
-<div class="risk">
-<div class="mini"><b>Orders growing, contribution falling</b><p><strong>Warning:</strong> every extra order adds less value. <strong>Action:</strong> stop expansion; fix price, basket size, route density or cost.</p></div>
-<div class="mini"><b>Cash burn rising</b><p><strong>Warning:</strong> runway falls faster than planned. <strong>Action:</strong> weekly cash review and immediate spending controls.</p></div>
-<div class="mini"><b>Funding becomes essential</b><p><strong>Warning:</strong> business cannot reach next milestone without another round. <strong>Action:</strong> raise earlier, cut burn, or change the plan — don't wait for zero cash.</p></div>
-<div class="mini"><b>One city is weak</b><p><strong>Warning:</strong> management says "scale will fix it." <strong>Action:</strong> demand proof before adding more fixed costs.</p></div>
-<div class="mini"><b>Competition starts a price war</b><p><strong>Warning:</strong> customers stay only while subsidised. <strong>Action:</strong> identify a real advantage and model the business without discounts.</p></div>
-<div class="mini"><b>Management ignores warnings</b><p><strong>Warning:</strong> dashboards exist but decisions don't change. <strong>Action:</strong> give the board explicit thresholds, owners and escalation rules.</p></div>
-</div>
-</section>
-
-<section class="section">
-<h2>When should a company raise money?</h2>
-<div class="chat">
-<div class="bubble"><div class="who">Bad question</div><p>"How much can we raise?"</p></div>
-<div class="bubble alt"><div class="who">Better question</div><p>"What milestone will this money buy, and what proof should exist when we reach it?"</p></div>
-<div class="bubble"><div class="who">Example</div><p>We need ₹10 crore to prove five profitable hubs, not ₹10 crore because "we are growing."</p></div>
-<div class="bubble alt"><div class="who">And who owns it?</div><p>Finance prepares the numbers. The CEO/founders own the plan. The board challenges and approves major decisions. Investors decide whether to fund based on their rights and agreements.</p></div>
-</div>
-<p>In a private company with outside investors, shareholder agreements and articles commonly set investor board representation, consent rights and approval rights over matters such as capital structure, borrowing, capex and key management decisions.</p>
-</section>
-
-<section class="section">
-<h2>Can a system warn us before the company gets into trouble?</h2>
-<p><strong>Yes — a company can build one. But it cannot guarantee that someone will listen.</strong></p>
-<p>Think of it like a smoke alarm. The alarm can detect smoke. It cannot physically stop the owner from ignoring it.</p>
-<div class="dark">
-<h3>A simple Business Early-Warning System</h3>
+<section>
+<div class="kicker">05 · The failure chain</div>
+<h2>It wasn't one mistake.</h2>
+<p>The important lesson is the interaction between decisions. A problem at one level made the next decision harder.</p>
 <div class="chain">
-<span class="node">Daily data</span><span class="arrow">→</span>
-<span class="node">Weekly dashboard</span><span class="arrow">→</span>
-<span class="node">Threshold breached</span><span class="arrow">→</span>
-<span class="node">Automatic alert</span><span class="arrow">→</span>
-<span class="node">Named owner</span><span class="arrow">→</span>
-<span class="node">Board escalation</span>
-</div>
-<p>Examples: contribution/order below target for 4 weeks; cash runway below 9 months; vendor dues above threshold; customer repeat falling; city loss above approved limit; expansion spend before milestone approval.</p>
-</div>
-</section>
-
-<section class="section">
-<h2>Who should own the warning system?</h2>
-<div class="grid">
-<div class="mini"><b>Finance / CFO</b><p>Cash, runway, payables, receivables, budget vs actual, fundraising needs.</p></div>
-<div class="mini"><b>Business / Operations</b><p>Orders, margin, capacity, delivery cost, quality, wastage, service levels.</p></div>
-<div class="mini"><b>Risk / Internal audit</b><p>Independent checks: controls, fraud risk, compliance and whether management reporting is reliable.</p></div>
-<div class="mini"><b>CEO</b><p>Acts on the warning. A dashboard is useless if nobody has authority to change the plan.</p></div>
-<div class="mini"><b>Board</b><p>Challenges the assumptions, protects the company and makes major capital/strategy decisions.</p></div>
-<div class="mini"><b>Investors</b><p>Use their contractual and governance rights to monitor and challenge management; they are not a substitute for management.</p></div>
+<div><strong>1. Growth became the target</strong> More cities, stores, delivery capacity and customers meant more infrastructure and spending.</div>
+<div><strong>2. The cost base grew with the ambition</strong> Dark stores, people, delivery operations, marketing and other operating costs had to be funded continuously.</div>
+<div><strong>3. Unit economics remained under pressure</strong> In quick commerce, every order has product, fulfilment and delivery costs. Higher volume does not automatically mean higher profit.</div>
+<div><strong>4. More capital became necessary</strong> When internal cash generation is weak, growth depends on the next funding round.</div>
+<div><strong>5. Funding becomes a clock</strong> If fundraising takes longer than expected, management has to cut costs, slow expansion or find another source of cash.</div>
+<div><strong>6. The cuts arrive after the model has already expanded</strong> Layoffs, delayed salaries, unpaid vendor obligations and shrinking operations are not the original problem; they are late-stage signals of financial stress.</div>
+<div><strong>7. Trust and strategic options shrink</strong> Once investors, employees and vendors lose confidence, raising money or finding a buyer becomes harder.</div>
 </div>
 </section>
 
-<section class="section">
-<h2>But what if everyone warns the boss and the boss ignores them?</h2>
-<div class="chat">
-<div class="bubble"><div class="who">Question</div><p>Then what is the point of the warning system?</p></div>
-<div class="bubble alt"><div class="who">Answer</div><p>This is the hardest part. A warning system is not just a dashboard. It needs an escalation path that cannot be quietly ignored.</p></div>
+<section>
+<div class="kicker">06 · The business at micro level</div>
+<h2>Where should a founder check the economics?</h2>
+<p>Don't jump straight to “Is the company profitable?” That is too late and too broad. Start lower down.</p>
+<div class="grid2">
+<div class="box"><h3>One order</h3><p>Does the order create positive contribution after the costs directly associated with serving it?</p>
+<div class="formula">Order revenue
+− product / fulfilment cost
+− delivery
+− incentives / discounts
+− payment / packing / support
+= contribution</div></div>
+<div class="box"><h3>One store / hub</h3><p>Can the local fulfilment operation cover its direct operating costs at a realistic order volume?</p><div class="formula">Store contribution
+− store people
+− rent / utilities
+− local overhead
+= store result</div></div>
+<div class="box"><h3>One city</h3><p>Does the city work after the costs needed to operate that market? A city can grow orders while still consuming cash.</p></div>
+<div class="box"><h3>Expansion</h3><p>Can the company fund the new stores, people, inventory and customer acquisition required before the new city reaches a stable operating level?</p></div>
 </div>
-<div class="box green">
-<strong>Good governance looks like this:</strong>
-<p>Red threshold → written alert → named owner → deadline → management response → board visibility → documented decision.</p>
-<p>If management chooses to continue despite the warning, the decision and reasoning should be recorded. That creates accountability and lets the board revisit it when conditions change.</p>
-</div>
-<p>Indian private-company governance can include investor nominee directors, reserved matters, board rights and shareholder protections; nominee directors also have duties under the Companies Act.</p>
+<p><strong>The key discipline:</strong> never let company-level growth hide deterioration at order, store or city level.</p>
 </section>
 
-<section class="section">
-<h2>Could Dunzo's story have been caught earlier?</h2>
-<p><strong>There were warning signs, yes. We cannot prove that one dashboard would have saved the company.</strong></p>
-<p>Public reporting describes losses, aggressive expansion, cash-flow problems, delayed salaries, unpaid vendors, board departures and increasingly difficult fundraising. Those are not subtle signals.</p>
-<p>The deeper lesson is more uncomfortable: <strong>detecting risk and acting on risk are two different jobs.</strong></p>
-</section>
-
-<section class="section">
-<h2>If you were starting this business tomorrow...</h2>
-<div class="dark">
-<div class="checks">
-<div class="check">☐ Know profit/contribution at order level.</div>
-<div class="check">☐ Know profit/loss at store or hub level.</div>
-<div class="check">☐ Know profit/loss at city level.</div>
-<div class="check">☐ Have a stop rule before expanding.</div>
-<div class="check">☐ Stress-test sales, prices and costs.</div>
-<div class="check">☐ Never make the next funding round part of survival.</div>
-<div class="check">☐ Give someone independent authority to raise a red flag.</div>
-<div class="check">☐ Decide what happens when the red flag is ignored.</div>
-</div>
+<section>
+<div class="kicker">07 · What the numbers were warning about</div>
+<h2>Signals worth watching</h2>
+<div class="econ">
+<table class="warning-table">
+<thead><tr><th>Signal</th><th>What it tells you</th><th>What should happen</th></tr></thead>
+<tbody>
+<tr><td><strong>Contribution per order</strong></td><td>Whether extra orders are economically useful.</td><td>If persistently negative, pause growth and fix the model.</td></tr>
+<tr><td><strong>Store contribution</strong></td><td>Whether each fulfilment node can support itself.</td><td>Set a time-bound break-even target before opening more.</td></tr>
+<tr><td><strong>City contribution</strong></td><td>Whether a market is becoming self-sustaining.</td><td>Use a city-level go/no-go gate.</td></tr>
+<tr><td><strong>Monthly cash burn</strong></td><td>How quickly the company is consuming its remaining cash.</td><td>Track actual burn against the approved plan every month.</td></tr>
+<tr><td><strong>Runway</strong></td><td>How much time remains before cash becomes critical.</td><td>Start fundraising or cost actions before the emergency zone.</td></tr>
+<tr><td><strong>Vendor dues</strong></td><td>Whether operations are being financed by delayed payments.</td><td>Escalate repeated delays to finance leadership and the board.</td></tr>
+<tr><td><strong>Salary delays</strong></td><td>A very visible sign of liquidity stress.</td><td>Treat repeated delays as a board-level warning, not normal operations.</td></tr>
+<tr><td><strong>Fundraising dependence</strong></td><td>Whether the business can survive without the next round.</td><td>Stress-test a 6–12 month funding delay.</td></tr>
+</tbody>
+</table>
 </div>
 </section>
 
-<section class="section">
-<h2>The simple lesson</h2>
-<div class="box red"><strong>Don't ask only, "Are we growing?"</strong><p>Ask: "At what level are we actually making money, where are we losing money, how much cash are we consuming, what could break next, and what will make us stop before the problem becomes too expensive?"</p></div>
+<section>
+<div class="kicker">08 · Expansion gate</div>
+<h2>Before opening the next city</h2>
+<p>A useful expansion rule is not “we have money, so let's expand.” The question is whether the existing model has produced enough evidence to justify adding another layer of fixed cost.</p>
+<div class="checklist">
+<div class="check">The current city has reached an agreed contribution threshold.</div>
+<div class="check">Order economics have remained healthy for several months, not just one good week.</div>
+<div class="check">The next city has a realistic path to break-even.</div>
+<div class="check">The company can fund the expansion without depending on an uncertain funding event.</div>
+<div class="check">There is a named person with authority to stop or slow expansion.</div>
+<div class="check">A downside scenario has been modelled before the money is committed.</div>
+</div>
 </section>
 
-<section class="section source">
-<h3>Evidence & limits</h3>
-<p>Major events and Dunzo's decline are supported by reporting from The Economic Times, Moneycontrol and Rest of World. Dunzo's insolvency process and creditor claims are supported by IBBI/NCLT records. The governance discussion is based on current Indian corporate-governance practice.</p>
-<p><strong>Confidence:</strong> high for the major reported events and current insolvency status; moderate for the exact contribution of each strategic decision to the eventual failure. Public sources do not provide a complete internal management dashboard, so the proposed warning system is a prevention framework, not a claim that it was Dunzo's actual internal system.</p>
+<section>
+<div class="kicker">09 · Fundraising</div>
+<h2>When should a business raise?</h2>
+<p>Fundraising should buy a specific piece of progress. It should not simply buy more time.</p>
+<div class="grid2">
+<div class="box"><h3>Good question</h3><p>“What milestone will this money buy, and what proof should exist when we reach it?”</p></div>
+<div class="box"><h3>Danger question</h3><p>“How much money do we need to keep operating until we can raise again?”</p></div>
+</div>
+<p>For a capital-heavy business, the board should know the answer to three numbers at every meeting: <strong>cash today, monthly burn, and realistic runway.</strong> Then stress-test what happens if the next round arrives six months late.</p>
 </section>
+
+<section>
+<div class="kicker">10 · Who should act?</div>
+<h2>A dashboard is useless if nobody owns the warning.</h2>
+<div class="grid2">
+<div class="box"><h3>Finance</h3><p>Own the cash position, runway, burn, payables and financial thresholds.</p></div>
+<div class="box"><h3>Operations</h3><p>Own store, city, delivery and service-level performance.</p></div>
+<div class="box"><h3>CEO</h3><p>Make the cross-company decision when growth, cost and strategy conflict.</p></div>
+<div class="box"><h3>Board / investors</h3><p>Challenge assumptions, review thresholds and escalate when management keeps missing agreed limits.</p></div>
+</div>
+<div class="warning"><strong>Important:</strong> detection is not action. A dashboard can tell you the business is entering danger. It cannot force a leadership team to stop. That is why every critical metric needs a threshold, an owner, a required action and an escalation path.</div>
+</section>
+
+
+<section>
+<div class="kicker">10A · Money Journey</div>
+<h2>How the money story changed</h2>
+<p>The important question is not simply how much money Dunzo raised. It is <strong>what the business needed the money to pay for, and whether the underlying business was getting stronger fast enough to justify that spending.</strong></p>
+<div class="journey">
+  <div class="journey-step"><span>1</span><strong>Small experiment</strong><p>Manual, local delivery. Learn what customers actually want.</p></div>
+  <div class="arrow">→</div>
+  <div class="journey-step"><span>2</span><strong>Investor-backed growth</strong><p>More capital allowed the company to build technology, people and operations.</p></div>
+  <div class="arrow">→</div>
+  <div class="journey-step"><span>3</span><strong>$240M round in 2022</strong><p>Reliance Retail led the round with a reported $200M investment.</p></div>
+  <div class="arrow">→</div>
+  <div class="journey-step danger"><span>4</span><strong>Expansion became expensive</strong><p>Dark stores, employees, marketing and multiple cities increased the monthly cash requirement.</p></div>
+  <div class="arrow">→</div>
+  <div class="journey-step danger"><span>5</span><strong>Funding became the oxygen</strong><p>When fresh capital became harder to secure, the company had less room to absorb the operating mismatch.</p></div>
+</div>
+<p class="note"><strong>Evidence:</strong> Dunzo's FY23 revenue from operations was ₹226.6 crore, while its loss was ₹1,801.8 crore and total expenses were ₹2,054.4 crore. The numbers do not prove that one decision caused the failure; they show how far the financial structure had moved from a comfortable position. citeturn0search1</p>
+</section>
+
+<section>
+<div class="kicker">10B · Financial Deterioration</div>
+<h2>Growth was not the same thing as financial health</h2>
+<div class="finance-grid">
+  <div class="metric-card"><div class="metric-label">FY22 revenue</div><div class="metric-value">₹54.3 Cr</div><div class="metric-sub">Operating revenue</div></div>
+  <div class="metric-card"><div class="metric-label">FY23 revenue</div><div class="metric-value">₹226.6 Cr</div><div class="metric-sub">More than 4× FY22</div></div>
+  <div class="metric-card warning"><div class="metric-label">FY23 loss</div><div class="metric-value">₹1,801.8 Cr</div><div class="metric-sub">Nearly 4× FY22 loss</div></div>
+  <div class="metric-card warning"><div class="metric-label">FY23 expenses</div><div class="metric-value">₹2,054.4 Cr</div><div class="metric-sub">vs ₹531.7 Cr in FY22</div></div>
+</div>
+<div class="bar-chart" aria-label="Illustrative comparison of Dunzo FY22 and FY23 reported financial figures">
+  <div class="bar-row"><span>Revenue</span><div class="bar-track"><i class="bar revenue" style="width:11%"></i></div><b>54.3 → 226.6</b></div>
+  <div class="bar-row"><span>Expenses</span><div class="bar-track"><i class="bar expense" style="width:100%"></i></div><b>531.7 → 2,054.4</b></div>
+  <div class="bar-row"><span>Loss</span><div class="bar-track"><i class="bar loss" style="width:88%"></i></div><b>464 → 1,801.8</b></div>
+</div>
+<p class="note">The bars are intentionally illustrative rather than a precise chart scale. The useful lesson is the direction: <strong>revenue grew, but the cost and loss burden grew much faster.</strong> citeturn0search1</p>
+</section>
+
+<section>
+<div class="kicker">10C · Intervention Windows</div>
+<h2>What management could have done differently</h2>
+<p>This is a <strong>counterfactual analysis</strong>, not a claim that management definitely should have chosen these actions. The point is to identify places where a business like this can create decision gates before the final crisis.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Stage</th><th>Danger signal</th><th>Possible intervention</th><th>Decision gate</th></tr></thead>
+<tbody>
+<tr><td>Before rapid city expansion</td><td>Existing markets not yet reliably attractive</td><td>Prove contribution economics in a small number of dense micro-markets.</td><td>Expand only when the existing market passes the agreed threshold.</td></tr>
+<tr><td>Before dark-store scale-up</td><td>Fixed costs rise faster than repeat demand</td><td>Test store-level payback and order density before opening the next cluster.</td><td>Every new store must have a measurable path to breakeven.</td></tr>
+<tr><td>During aggressive marketing</td><td>Volume rises but cash burn rises faster</td><td>Measure incremental contribution, not just orders or app activity.</td><td>Pause campaigns that do not produce acceptable incremental economics.</td></tr>
+<tr><td>Before the next fundraise</td><td>Runway depends on another round</td><td>Run a 12-month no-new-funding stress test.</td><td>Freeze discretionary expansion if survival depends on an uncertain round.</td></tr>
+<tr><td>When salaries/vendors are delayed</td><td>Financial stress is reaching stakeholders</td><td>Treat this as an escalation event, not a temporary inconvenience.</td><td>Board-level recovery plan, cash controls and explicit survival milestones.</td></tr>
+</tbody></table></div>
+</section>
+
+<section>
+<div class="kicker">10D · Could It Have Been Saved?</div>
+<h2>Probably — but only before the options became smaller</h2>
+<p>There is no reliable way to prove a counterfactual. We cannot say that one particular restructuring would definitely have saved Dunzo. But the evidence shows several earlier moments when the business still had more choices.</p>
+<div class="save-grid">
+  <div class="save-box"><strong>Window 1 · Before hyper-expansion</strong><p>Concentrate on the strongest city and micro-markets, prove store economics and expand only from demonstrated performance.</p></div>
+  <div class="save-box"><strong>Window 2 · When losses accelerated</strong><p>Reduce the cash requirement aggressively, protect the core business and make funding a bridge rather than the permanent operating model.</p></div>
+  <div class="save-box"><strong>Window 3 · Before stakeholder stress</strong><p>Delayed salaries, vendor dues and board departures are not just PR problems. They are signals that the recovery window is narrowing.</p></div>
+</div>
+<p class="note">By FY23, Dunzo's auditor highlighted a material uncertainty around going concern and said continued operations were significantly dependent on additional funding and improved business performance. That is a very late-stage warning. citeturn0search2</p>
+</section>
+
+<section>
+<div class="kicker">10E · Failure Tree</div>
+<h2>The whole failure in one picture</h2>
+<div class="failure-tree">
+  <div class="tree-root">DUNZO FAILURE</div>
+  <div class="tree-branches">
+    <div><strong>Strategy</strong><span>Rapid expansion + quick-commerce push</span></div>
+    <div><strong>Economics</strong><span>High operating and dark-store cost structure</span></div>
+    <div><strong>Funding</strong><span>Large capital requirement + dependence on fresh funding</span></div>
+  </div>
+  <div class="tree-arrow">↓</div>
+  <div class="tree-middle">Higher cash burn · less runway · greater pressure to raise</div>
+  <div class="tree-arrow">↓</div>
+  <div class="tree-bottom">Operational stress → delayed salaries / dues → governance stress → shrinking options → insolvency process</div>
+</div>
+<p class="note"><strong>Root-cause caution:</strong> this tree is Failure Lab's synthesis of the evidence, not a statement that Dunzo had one single cause of failure. Multiple factors interacted.</p>
+</section>
+
+<section>
+<div class="kicker">10F · Current Status</div>
+<h2>Where is Dunzo now?</h2>
+<p>Dunzo Digital entered the corporate insolvency resolution process in August 2025. The IBBI records a final admission order dated <strong>6 August 2025</strong>. As of the latest IBBI resolution-plan listing available in 2026, Dunzo Digital was still part of the resolution-plan process, with a Form G published on 6 June 2026 and subsequent EOI deadlines in June/July 2026. citeturn1search1turn0search0</p>
+<p>So the clean lesson is not “the company shut down and the story ended.” The legal and financial resolution process continued after the operating business had deteriorated.</p>
+</section>
+
+<section>
+<div class="kicker">11 · Stakeholders</div>
+<h2>When the business weakens, who feels it?</h2>
+<div class="grid2">
+<div class="box"><h3>Investors</h3><p>They can lose some or all of the capital they invested. Dunzo's funding history included major institutional investors; Reliance Retail invested $200 million in 2022. Later reporting described the difficulty of securing additional capital and the deterioration of the business.</p></div>
+<div class="box"><h3>Employees</h3><p>Layoffs and delayed salaries can turn a financial problem into an organisational one. Once employees leave, recovery becomes even harder.</p></div>
+<div class="box"><h3>Vendors and lenders</h3><p>Unpaid or delayed obligations become claims against the company and can eventually enter formal legal or insolvency processes.</p></div>
+<div class="box"><h3>Customers</h3><p>The immediate impact is loss or reduction of the service. Any unresolved prepaid amounts or claims have to be treated according to the company's actual legal/insolvency process; customers should not assume automatic full recovery.</p></div>
+</div>
+</section>
+
+<section>
+<div class="kicker">12 · Tomorrow Test</div>
+<h2>If you started this business tomorrow…</h2>
+<p>Don't copy Dunzo's strategy. Test the assumptions that would make a Dunzo-like business dangerous.</p>
+<div class="checklist">
+<div class="check">Can one order make a positive contribution without relying on permanent discounts?</div>
+<div class="check">Can one store become economically viable at a realistic order volume?</div>
+<div class="check">Can one city work before the company opens five more?</div>
+<div class="check">What happens if customer growth is 30% slower than planned?</div>
+<div class="check">What happens if the next funding round is delayed by 12 months?</div>
+<div class="check">How much cash can the company safely burn each month?</div>
+<div class="check">Who has authority to freeze expansion?</div>
+<div class="check">What exact metric would trigger that freeze?</div>
+<div class="check">If management ignores the trigger, who escalates it?</div>
+<div class="check">Could the company survive without the next investor?</div>
+</div>
+</section>
+
+<section>
+<div class="kicker">13 · The lesson</div>
+<h2>What actually killed the business?</h2>
+<p>It is too simple to say “Dunzo ran out of money.” That describes the final crisis, not the whole mechanism.</p>
+<p>The more useful interpretation is that Dunzo pursued a capital-intensive growth path while its underlying economics and cost structure remained under pressure. Expansion increased the amount of money the business needed. As fundraising became harder, the company had fewer options to absorb the mismatch. The later operational and governance problems were symptoms of a business already under severe financial stress.</p>
+<p>Lightbox managing director Sandeep Murthy later said Dunzo lost focus on fundamentals, particularly unit economics and the cost structure of dark stores, and became too focused on capital raising rather than building a sustainable retail model.</p>
+<div class="quote">The warning to take away isn't “don't grow fast.” It is: <strong>don't confuse growth with proof.</strong></div>
+</section>
+
+<section class="sources">
+<div class="kicker">14 · Evidence</div>
+<h2>Sources used for this case</h2>
+<ul>
+<li><a href="https://economictimes.indiatimes.com/tech/technology/dunzos-demise-how-the-reliance-backed-hyperlocal-delivery-startup-unravelled/articleshow/117090553.cms" target="_blank" rel="noopener">Economic Times — Dunzo's demise: how the Reliance-backed hyperlocal delivery startup unravelled</a></li>
+<li><a href="https://economictimes.indiatimes.com/tech/startups/dunzos-business-plummets-amid-severe-cash-crunch/articleshow/102179108.cms" target="_blank" rel="noopener">Economic Times — Dunzo's business in free fall amid severe cash flow issues</a></li>
+<li><a href="https://economictimes.indiatimes.com/tech/technology/dunzo-app-website-go-offline-post-cofounder-kabeer-biswas-exit-to-flipkart/articleshow/117222783.cms" target="_blank" rel="noopener">Economic Times — Dunzo app and website go offline</a></li>
+<li><a href="https://ibbi.gov.in/claims/order-process/U74900KA2014PTC075256" target="_blank" rel="noopener">IBBI — Dunzo Digital Private Limited NCLT admission order</a></li>
+<li><a href="https://ibbi.gov.in/resolution-plans?page=13" target="_blank" rel="noopener">IBBI — Resolution-plan listing showing Dunzo Digital in the 2026 process</a></li>
+<li><a href="https://yourstory.com/2025/05/product-profit-returns-lightbox-sandeep-murthy" target="_blank" rel="noopener">YourStory — Lightbox's Sandeep Murthy on product, profit and Dunzo</a></li>
+</ul>
+<p><small>Facts and reported figures are presented as reported by the cited sources. Where sources describe disputed or estimated operational figures, the page preserves that uncertainty rather than treating them as exact company-reported numbers.</small></p>
+</section>
+</div>
 </main>
-<footer><div class="wrap">Failure Lab · Case #001 · Dunzo · Evidence-backed learning case</div></footer>
+
+<footer><div class="wrap">Failure Lab · Case #001 · Dunzo</div></footer>
 </body>
 </html>
