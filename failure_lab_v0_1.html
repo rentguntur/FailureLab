@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Failure Lab — Learn Before You Build</title>
+<meta name="description" content="Real business failure stories, explained simply: what happened, what went wrong, what was visible early, and what you should check before starting a similar business.">
+<style>
+  :root{
+    --paper:#f7f3ea;
+    --ink:#24231f;
+    --muted:#6f6b61;
+    --line:#d8d1c3;
+    --card:#fffdf8;
+    --accent:#b94b32;
+    --accent-soft:#f1ddd5;
+    --yellow:#f4e8a8;
+    --green:#dce9d7;
+    --blue:#dce7ef;
+    --shadow:0 10px 30px rgba(35,31,24,.07);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    color:var(--ink);
+    background:var(--paper);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height:1.6;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1120px,92%);margin:auto}
+  header{
+    position:sticky;top:0;z-index:10;
+    background:rgba(247,243,234,.94);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{font-weight:900;letter-spacing:-.04em;font-size:1.35rem}
+  .brand span{color:var(--accent)}
+  .navlinks{display:flex;gap:22px;color:var(--muted);font-size:.95rem}
+  .navlinks a:hover{color:var(--ink)}
+  .hero{padding:86px 0 64px}
+  .eyebrow{
+    display:inline-block;padding:6px 10px;border:1px solid var(--line);
+    border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    background:var(--card);
+  }
+  h1{
+    max-width:820px;font-size:clamp(3rem,7vw,6.2rem);line-height:.96;
+    letter-spacing:-.065em;margin:22px 0;
+  }
+  .hero p{max-width:690px;font-size:1.18rem;color:var(--muted)}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;
+    border-radius:10px;border:1px solid var(--ink);font-weight:800;
+  }
+  .btn.primary{background:var(--ink);color:white}
+  .btn.secondary{background:transparent}
+  section{padding:54px 0}
+  .section-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:24px}
+  h2{font-size:clamp(2rem,4vw,3.4rem);line-height:1.05;letter-spacing:-.045em;margin:0}
+  .section-head p{max-width:520px;color:var(--muted);margin:0}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;
+    box-shadow:var(--shadow);
+  }
+  .card h3{margin:10px 0 8px;font-size:1.35rem;line-height:1.15}
+  .card p{color:var(--muted);margin:0}
+  .tag{
+    display:inline-block;font-size:.76rem;font-weight:800;padding:5px 8px;border-radius:7px;
+    background:var(--accent-soft);color:#7d2f1f;
+  }
+  .conversation{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;
+  }
+  .bubble{padding:20px 22px;border-radius:18px;border:1px solid var(--line);background:var(--card)}
+  .bubble.friend2{background:#f0eee8}
+  .speaker{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:var(--accent)}
+  .bubble p{margin:8px 0 0}
+  .principles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .principle{padding:20px;border-left:4px solid var(--accent);background:var(--card);border-radius:0 12px 12px 0}
+  .principle strong{display:block;margin-bottom:4px}
+  .tomorrow{
+    background:var(--ink);color:white;border-radius:22px;padding:36px;
+  }
+  .tomorrow p{color:#d9d5cc}
+  .checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:22px}
+  .check{padding:12px 14px;background:#34322d;border-radius:9px}
+  .method{
+    display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:start;
+  }
+  .method ul{padding-left:20px}
+  .method li{margin:9px 0}
+  .note{padding:18px;background:var(--yellow);border-radius:14px}
+  footer{border-top:1px solid var(--line);padding:32px 0 50px;color:var(--muted);font-size:.9rem}
+  @media(max-width:800px){
+    .navlinks{display:none}
+    .grid,.conversation,.method,.principles,.checks{grid-template-columns:1fr}
+    .hero{padding-top:58px}
+    h1{font-size:clamp(3rem,15vw,5rem)}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="brand">Failure<span>Lab</span></div>
+      <div class="navlinks">
+        <a href="#cases">Cases</a>
+        <a href="#patterns">Patterns</a>
+        <a href="#tomorrow">Tomorrow Test</a>
+        <a href="#method">How we research</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Learn before you build</span>
+      <h1>What if we studied failure before making the same mistake?</h1>
+      <p>
+        Real business stories. Explained simply. We follow what happened, find the first warning signs,
+        understand why the problem grew, and finish with one practical question:
+        <strong>If you were starting this business tomorrow, what would you check?</strong>
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#cases">Explore the cases</a>
+        <a class="btn secondary" href="#method">Our approach</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="cases">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Failure stories</h2>
+        <p>This is the library. Each case will become a permanent page, researched and written in plain English.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <span class="tag">Coming first</span>
+          <h3>Our first case is being researched</h3>
+          <p>We are deliberately not filling this page with a made-up story. The first case will set the quality bar for everything that follows.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Near failure</span>
+          <h3>Companies that almost died</h3>
+          <p>Sometimes the best lesson comes from a business that spotted the problem in time and changed course.</p>
+        </article>
+        <article class="card">
+          <span class="tag">India + Global</span>
+          <h3>Not just startups</h3>
+          <p>Startups, family businesses, manufacturing, retail, restaurants, export, logistics and established companies.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How a case should feel</h2>
+        <p>It can be a conversation between two people, or simply an easy-to-follow story. The goal is understanding, not performance.</p>
+      </div>
+      <div class="conversation">
+        <div class="bubble">
+          <div class="speaker">Friend A</div>
+          <p>Wait. They had customers and were growing. So how did they still fail?</p>
+        </div>
+        <div class="bubble friend2">
+          <div class="speaker">Friend B</div>
+          <p>That's the interesting part. The company didn't suddenly fail. There were clues earlier. Let's go back and find them.</p>
+        </div>
+        <div class="bubble friend2">
+          <div class="speaker">Friend B</div>
+          <p>Here's the simple version: they were getting more sales, but each sale was making the business weaker.</p>
+        </div>
+        <div class="bubble">
+          <div class="speaker">Friend A</div>
+          <p>So growing faster was actually making the problem bigger?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="patterns">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Look for the pattern</h2>
+        <p>One failure is a story. Many failures start showing us patterns we can recognize elsewhere.</p>
+      </div>
+      <div class="principles">
+        <div class="principle"><strong>Market</strong>Did enough people actually want this?</div>
+        <div class="principle"><strong>Money</strong>Did each sale help the business or hurt it?</div>
+        <div class="principle"><strong>Cash flow</strong>Could the business survive the gap between paying bills and getting paid?</div>
+        <div class="principle"><strong>People</strong>Were the founders, leaders and key hires working well together?</div>
+        <div class="principle"><strong>Operations</strong>Could the business actually deliver what it promised?</div>
+        <div class="principle"><strong>Strategy</strong>Did the company grow or change direction before the basics were working?</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tomorrow">
+    <div class="wrap">
+      <div class="tomorrow">
+        <span class="eyebrow">The bottom line</span>
+        <h2 style="margin-top:16px">If you were starting this business tomorrow...</h2>
+        <p>Every case must end here. Not with a vague lesson, but with things you could actually check before putting your time or money into a similar business.</p>
+        <div class="checks">
+          <div class="check">☐ Who is the real paying customer?</div>
+          <div class="check">☐ Why will they keep buying?</div>
+          <div class="check">☐ What do I actually make from one sale?</div>
+          <div class="check">☐ What happens if sales are much lower than expected?</div>
+          <div class="check">☐ Where could cash get stuck?</div>
+          <div class="check">☐ What warning sign would make me stop?</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="method">
+    <div class="wrap">
+      <div class="method">
+        <div>
+          <h2>Simple to read. Serious underneath.</h2>
+          <p>
+            The writing will be friendly, but the research will not be casual.
+            We will separate what we know from what we think.
+          </p>
+          <ul>
+            <li>Verify important facts from credible sources.</li>
+            <li>Build the timeline before explaining the failure.</li>
+            <li>Separate the final symptom from the deeper cause.</li>
+            <li>Look for warning signs that were genuinely visible at the time.</li>
+            <li>Do not turn hindsight into certainty.</li>
+            <li>Clearly label uncertainty when the evidence is incomplete.</li>
+          </ul>
+        </div>
+        <div class="note">
+          <strong>One rule we will protect.</strong>
+          <p>We won't write a founder's story as if we already knew the ending. A failure page should help the reader understand what someone could reasonably have known and checked at the time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>Failure Lab</strong> — Study failure. Spot the warning signs. Build better.
+    <br><br>
+    Foundation prototype. The first researched case will become the gold-standard page for the library.
+  </div>
+</footer>
+
+</body>
+</html>
