@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PepperTap — Failure Lab Case #002</title><meta name="description" content="PepperTap: a Failure Lab case study on hyperlocal grocery delivery, negative unit economics, discounts, rapid expansion and early warning signs."><style>
+:root{
+  --bg:#f7f4ee;--paper:#fffdf8;--ink:#171717;--muted:#6a655d;--line:#d9d2c5;
+  --accent:#d85b3f;--accent2:#f0e4d8;--dark:#20201f;--green:#48684d;--red:#a83d29;
+  --shadow:0 12px 32px rgba(30,25,18,.07);--r:18px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+a{color:inherit}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);background:rgba(247,244,238,.94);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}
+nav{min-height:68px;display:flex;justify-content:space-between;align-items:center}
+.brand{text-decoration:none;font-weight:900;letter-spacing:-.04em}.brand span{color:var(--accent)}
+.back{font-size:.88rem;color:var(--muted);text-decoration:none}.back:hover{color:var(--accent)}
+.hero{padding:70px 0 45px}
+.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;font-weight:850;color:var(--red)}
+.hero h1{font-size:clamp(3.2rem,8vw,6.4rem);line-height:.88;letter-spacing:-.07em;margin:15px 0 18px}
+.subtitle{font-size:1.25rem;max-width:760px;color:#4e4a43}
+.factbar{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.pill{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 12px;font-size:.8rem;color:#565149}
+.warning{margin:25px 0 55px;padding:22px 24px;background:var(--accent2);border-left:5px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+.warning strong{display:block;margin-bottom:4px}
+section{padding:55px 0;border-top:1px solid var(--line)}
+.kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;font-weight:900;color:var(--red);margin-bottom:9px}
+h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1;letter-spacing:-.055em;margin:0 0 18px}
+h3{font-size:1.3rem;letter-spacing:-.025em;margin:0 0 9px}
+p{max-width:780px;color:#4e4a43}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:23px;box-shadow:var(--shadow)}
+
+.image-grid{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:18px;
+  margin-top:28px;
+}
+.image-card{
+  margin:0;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.image-card img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  display:block;
+}
+.image-card.wide img{height:330px}
+.image-card figcaption{
+  padding:13px 15px 15px;
+  font-size:.82rem;
+  color:var(--muted);
+}
+.image-card figcaption strong{
+  display:block;
+  color:var(--ink);
+  font-size:.9rem;
+  margin-bottom:3px;
+}
+.image-card figcaption a{
+  color:var(--red);
+  text-decoration:none;
+}
+.image-card figcaption a:hover{text-decoration:underline}
+@media(max-width:700px){
+  .image-grid{grid-template-columns:1fr}
+  .image-card img,.image-card.wide img{height:230px}
+}
+
+.timeline{display:grid;gap:0;margin-top:28px}
+.event{display:grid;grid-template-columns:105px 1fr;gap:20px;padding:20px 0;border-top:1px solid var(--line)}
+.event:first-child{border-top:0}
+.year{font-weight:900;color:var(--red)}
+.chain{display:grid;gap:0;margin-top:30px}
+.chain div{background:var(--paper);border:1px solid var(--line);padding:15px 18px;position:relative}
+.chain div:not(:last-child)::after{content:"↓";position:absolute;left:50%;bottom:-18px;z-index:2;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:var(--accent);font-weight:900}
+.chain div:not(:last-child){margin-bottom:20px}
+.chain strong{display:block}
+.econ{overflow:auto;margin-top:24px}
+.econ table,.warning-table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eee8dc;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+tr:last-child td{border-bottom:0}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--dark);color:#fff;padding:20px;border-radius:14px;overflow:auto}
+.alert{border-left:4px solid var(--accent);padding:16px 18px;background:var(--paper);margin:12px 0;border-radius:0 12px 12px 0}
+.alert .metric{font-weight:900}
+.checklist{display:grid;gap:10px;margin-top:22px}
+.check{background:var(--paper);border:1px solid var(--line);padding:14px 16px;border-radius:12px}
+.check::before{content:"□";font-size:1.15rem;margin-right:10px;color:var(--accent);font-weight:900}
+.quote{font-size:1.18rem;font-weight:750;color:var(--ink);border-left:4px solid var(--accent);padding:14px 20px;margin:25px 0;background:var(--paper)}
+.sources a{color:var(--red)}
+footer{padding:40px 0;color:var(--muted);font-size:.85rem}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}.event{grid-template-columns:75px 1fr}.hero h1{font-size:3.6rem}}
+
+.journey{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;gap:10px;align-items:stretch;margin:22px 0}.journey-step{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.journey-step span{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);margin-bottom:10px;font-weight:700}.journey-step.danger{border-color:#d9b4a7}.journey-step h3,.journey-step strong{display:block}.journey-step p{margin:7px 0 0}.arrow{display:flex;align-items:center;justify-content:center;font-size:22px}.finance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.metric-card{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.metric-card.warning{border-color:#d9b4a7}.metric-label{font-size:.82rem;opacity:.7}.metric-value{font-size:1.65rem;font-weight:800;margin:5px 0}.metric-sub{font-size:.85rem;opacity:.72}.bar-chart{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);display:grid;gap:15px}.bar-row{display:grid;grid-template-columns:90px 1fr 125px;gap:10px;align-items:center;font-size:.9rem}.bar-track{height:13px;background:#eee;border-radius:99px;overflow:hidden}.bar{display:block;height:100%;border-radius:99px}.bar.revenue{background:#777}.bar.expense{background:#444}.bar.loss{background:#aaa}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;min-width:760px}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table-wrap th{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}.save-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.save-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.failure-tree{padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:center}.tree-root{display:inline-block;padding:14px 22px;border-radius:12px;border:2px solid #222;font-weight:800}.tree-branches{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.tree-branches div{padding:15px;border:1px solid var(--line);border-radius:12px}.tree-branches strong,.tree-branches span{display:block}.tree-branches span{font-size:.88rem;opacity:.72;margin-top:6px}.tree-arrow{font-size:24px;margin:8px}.tree-middle,.tree-bottom{padding:15px;border-radius:12px;border:1px dashed var(--line);font-weight:600}.tree-bottom{font-weight:500}.note{font-size:.9rem;opacity:.78}
+@media(max-width:900px){.journey{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:24px}.finance-grid,.save-grid,.tree-branches{grid-template-columns:1fr}.bar-row{grid-template-columns:75px 1fr}.bar-row b{grid-column:2;font-size:.8rem}}
+
+
+/* PepperTap case additions */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin:22px 0}.flow .step{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px;text-align:center;font-weight:800;box-shadow:var(--shadow)}.flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:900;font-size:1.3rem}.chain{display:flex;flex-direction:column;gap:10px;margin:22px 0}.chain .node{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 18px}.chain .node strong{display:block}.chain .arrow{text-align:center;color:var(--accent);font-weight:900}.metric{font-size:2rem;font-weight:900;letter-spacing:-.05em}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}.gallery figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}.gallery img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}.gallery figcaption{padding:13px 15px;font-size:.88rem;color:var(--muted)}.gallery a{color:var(--accent);font-weight:800}.callout{background:var(--accent2);border-left:5px solid var(--accent);padding:20px;border-radius:14px;margin:22px 0}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;background:var(--paper);border-radius:14px;overflow:hidden}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table-wrap th{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:var(--accent2);font-size:.75rem;font-weight:800;margin:3px 4px 3px 0}@media(max-width:760px){.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.gallery{grid-template-columns:1fr}}</style></head><body>
+<header><div class="wrap"><nav><a class="brand" href="../../index.html">Failure<span>Lab</span></a><a class="back" href="../../index.html">← Case library</a></nav></div></header>
+<main>
+<div class="wrap">
+<section class="hero">
+<div class="eyebrow">Case #002 · Startup · Grocery delivery</div>
+<h1>PepperTap</h1>
+<p class="subtitle">It grew incredibly fast. It raised more than $50 million. It reached roughly 20,000 orders a day at its peak. Then, within months, it shut its consumer grocery business. The interesting question is not just <em>why it failed</em>. It is: <strong>why did the business keep losing money as it scaled?</strong></p>
+<div class="factbar"><span class="pill">Founded 2014</span><span class="pill">Gurgaon, India</span><span class="pill">Consumer grocery business shut Apr 2016</span><span class="pill">~$51M reported funding</span></div>
+</section>
+
+<section class="section">
+<div class="kicker">01 · Understand the business</div>
+<h2>First, what was PepperTap?</h2>
+<div class="grid2">
+<div class="box"><h3>What did it do?</h3><p>PepperTap was an app-based grocery delivery service. Customers ordered groceries and household items, and PepperTap arranged the picking and delivery from partner stores.</p></div>
+<div class="box"><h3>Who started it?</h3><p>Navneet Singh and Milind Sharma founded PepperTap in 2014. Both had prior experience in logistics and e-commerce, including work connected to Delhivery and their earlier logistics venture, Nuvo Ex.</p></div>
+<div class="box"><h3>What was clever about the model?</h3><p>It was largely inventory-less. Instead of owning a large grocery warehouse network, PepperTap connected customers to existing local stores and handled the technology and delivery layer.</p></div>
+<div class="box"><h3>What was the promise?</h3><p>Convenience: order groceries from your phone and get them delivered quickly, with PepperTap initially promising delivery within about two hours.</p></div>
+</div>
+<div class="callout"><strong>The hidden challenge:</strong> PepperTap avoided the cost of owning all the inventory and warehouses, but that did not make the delivery economics easy. It still had to acquire customers, integrate with stores, maintain delivery capacity and fulfil the promised service even when demand was uneven.</div>
+</section>
+
+<section class="section">
+<div class="kicker">02 · See the business</div>
+<h2>What PepperTap looked like in the real world</h2>
+<p>These are real historical images from contemporaneous or reputable reporting. They are here to help you picture the business, not to decorate the page.</p>
+<div class="gallery">
+<figure><img src="https://bsmedia.business-standard.com/_media/bs/img/article/2016-01/31/full/1454257304-3818.jpg" alt="Milind Sharma at PepperTap headquarters"><figcaption>Co-founder Milind Sharma at PepperTap. Source: <a href="https://www.business-standard.com/article/management/technology-developed-in-house-has-been-our-key-differentiator-milind-sharma-116013100580_1.html" target="_blank" rel="noopener">Business Standard</a>.</figcaption></figure>
+<figure><img src="https://cdn.techinasia.com/wp-content/uploads/2021/07/1626143867_2f0f43c98db1689a720bbab64152fc03_v1626143866_xlarge.webp" alt="PepperTap founder in office"><figcaption>PepperTap founder in the company's office. Source: <a href="https://www.techinasia.com/indias-top-30-startup-founders" target="_blank" rel="noopener">Tech in Asia</a>.</figcaption></figure>
+<figure><img src="https://cdn.ndtv.com/tech/images/peppertap_delivery_main.jpg" alt="PepperTap grocery delivery handoff"><figcaption>A PepperTap grocery delivery handoff. Source: <a href="https://www.gadgets360.com/apps/news/peppertap-shuts-down-grocery-delivery-pivots-to-logistics-829782" target="_blank" rel="noopener">Gadgets 360 / NDTV</a>.</figcaption></figure>
+<figure><img src="https://images.yourstory.com/cs/wordpress/2015/04/Peppertap-app.jpg?auto=format&blur=500&fm=png" alt="PepperTap grocery app"><figcaption>PepperTap's grocery app interface. Source: <a href="https://yourstory.com/2015/04/peppertap-funding" target="_blank" rel="noopener">YourStory</a>.</figcaption></figure>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">03 · How it worked</div>
+<h2>The business model in one picture</h2>
+<div class="flow">
+<div class="step">Customer<br><small>opens app</small></div><div class="arrow">→</div>
+<div class="step">Partner store<br><small>provides items</small></div><div class="arrow">→</div>
+<div class="step">PepperTap<br><small>coordinates picking</small></div>
+</div>
+<div class="flow">
+<div class="step">Delivery network<br><small>moves the order</small></div><div class="arrow">→</div>
+<div class="step">Customer<br><small>gets groceries</small></div><div class="arrow">→</div>
+<div class="step">PepperTap earns<br><small>commission / fees</small></div>
+</div>
+<p>The model looked attractive because PepperTap did not need to buy and warehouse all the groceries itself. But every order still created a cost stack: delivery labour, discounts, customer acquisition, technology/integration work and the cost of keeping delivery capacity ready.</p>
+</section>
+
+<section class="section">
+<div class="kicker">04 · Why it looked good</div>
+<h2>For a while, the numbers looked exciting</h2>
+<div class="grid3">
+<div class="box"><div class="metric">600+</div><p>daily orders within about five months of starting, according to a 2015 YourStory interview.</p></div>
+<div class="box"><div class="metric">20,000</div><p>orders per day claimed by the founder around October–December 2015.</p></div>
+<div class="box"><div class="metric">~$51M</div><p>reported funding across multiple rounds before the grocery shutdown.</p></div>
+</div>
+<p>That combination—fast order growth, large funding rounds and rapid city expansion—made PepperTap look like a winner. The problem was that <strong>order growth was not the same as economic progress.</strong></p>
+</section>
+
+<section class="section">
+<div class="kicker">05 · Timeline</div>
+<h2>How the situation changed</h2>
+<div class="timeline">
+<div class="event"><div class="year">2014</div><div><h3>Started in Gurgaon</h3><p>PepperTap launched in November 2014 as an on-demand grocery service.</p></div></div>
+<div class="event"><div class="year">Feb–Apr 2015</div><div><h3>Early institutional backing</h3><p>Sequoia provided seed funding, followed by a reported $10 million Series A from Sequoia and SAIF Partners.</p></div></div>
+<div class="event"><div class="year">Sep 2015</div><div><h3>$36M round and aggressive expansion</h3><p>Snapdeal led a $36 million round with participation from existing and new investors. PepperTap said it planned to expand aggressively.</p></div></div>
+<div class="event"><div class="year">Late 2015</div><div><h3>Scale peaks</h3><p>The founder later described PepperTap as one of India's top grocery delivery services, with around 20,000 daily orders and operations across many cities.</p></div></div>
+<div class="event"><div class="year">Dec 2015</div><div><h3>Jiffstore acquisition</h3><p>PepperTap acquired hyperlocal grocery marketplace Jiffstore, adding another layer to its expansion strategy.</p></div></div>
+<div class="event"><div class="year">Feb 2016</div><div><h3>City pullback</h3><p>PepperTap shut operations in a large number of locations and continued in a much smaller footprint.</p></div></div>
+<div class="event"><div class="year">Apr 2016</div><div><h3>Consumer grocery business ends</h3><p>PepperTap announced it would shut the grocery operation and pivot toward e-commerce logistics.</p></div></div>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">06 · The failure mechanism</div>
+<h2>It wasn't one mistake.</h2>
+<p>PepperTap's own post-mortem, reported at the time, pointed to three major problems: deep discounting, scaling faster than its operating processes could support, and the high cost of maintaining supply. It also faced difficult store-integration and inventory-data problems.</p>
+<div class="chain">
+<div class="node"><strong>1. Customer acquisition needed discounts</strong>Groceries are a low-margin category, so large discounts were expensive to fund.</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>2. Every order still needed delivery capacity</strong>Drivers and delivery infrastructure had to be ready even when orders were uneven.</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>3. Partner-store data was difficult</strong>Inventory and catalogue information from stores had to be integrated and updated; the company described this as a major operational challenge.</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>4. Negative economics persisted</strong>Founder Navneet Singh later said PepperTap was operating on a negative margin per delivery and that profitability looked distant.</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>5. Scaling multiplied the problem</strong>More cities meant more stores, people, delivery capacity and operational complexity.</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>6. The funding environment changed</strong>Once investors became less willing to fund businesses that were losing money on each order, the ability to outspend the problem disappeared.</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>7. The business pulled back and then stopped</strong>After city closures and further deterioration, PepperTap shut the consumer grocery operation and pivoted to logistics.</div>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">07 · The money test</div>
+<h2>The question should have been: does one more order help?</h2>
+<div class="grid2">
+<div class="box"><h3>Money coming in</h3><p>Customer payment + any delivery fee + commission/revenue from the transaction.</p></div>
+<div class="box"><h3>Money going out</h3><p>Delivery cost + discounts + customer acquisition + operational overhead + technology/integration cost.</p></div>
+</div>
+<div class="callout"><strong>The key warning:</strong> If the company loses money on each order, then “more orders” can make the loss larger. Scale only helps when the economics improve with scale.</div>
+<div class="table-wrap"><table><thead><tr><th>Question</th><th>Healthy signal</th><th>Danger signal</th></tr></thead><tbody>
+<tr><td>Contribution per order</td><td>Positive or moving toward positive with clear evidence.</td><td>Negative on every order with no credible path to reversal.</td></tr>
+<tr><td>Discount dependence</td><td>Customers return without large subsidies.</td><td>Demand falls sharply when discounts are reduced.</td></tr>
+<tr><td>Delivery utilisation</td><td>Enough orders per delivery resource to cover its cost.</td><td>Capacity sits idle but still costs money.</td></tr>
+<tr><td>Store integration</td><td>Accurate catalogue and availability.</td><td>Frequent mismatches, substitutions and cancellations.</td></tr>
+<tr><td>City economics</td><td>New city reaches a defined contribution threshold.</td><td>City grows orders but remains structurally loss-making.</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section">
+<div class="kicker">08 · Warning signals</div>
+<h2>Signals that mattered before the shutdown</h2>
+<div class="table-wrap"><table><thead><tr><th>Signal</th><th>What it meant</th><th>What should happen next</th></tr></thead><tbody>
+<tr><td>Negative margin per delivery</td><td>The core transaction was not yet self-supporting.</td><td>Freeze expansion until the contribution equation improves.</td></tr>
+<tr><td>Heavy discounts required</td><td>Acquisition and retention were being subsidised.</td><td>Run a controlled discount withdrawal test.</td></tr>
+<tr><td>Store data integration problems</td><td>The service promise depended on unreliable inputs.</td><td>Measure cancellation, substitution and fulfilment accuracy by store.</td></tr>
+<tr><td>City closures</td><td>Some markets were not proving viable.</td><td>Use explicit city-level exit/continue thresholds.</td></tr>
+<tr><td>Funding climate deteriorating</td><td>Future capital could no longer be treated as guaranteed.</td><td>Recalculate runway using zero-new-funding assumptions.</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section">
+<div class="kicker">09 · Decision gate</div>
+<h2>Before opening the next city</h2>
+<div class="flow">
+<div class="step">Prove one<br>micro-market</div><div class="arrow">→</div><div class="step">Measure<br>contribution</div><div class="arrow">→</div><div class="step">Test repeat<br>behaviour</div>
+</div>
+<div class="flow">
+<div class="step">Stress-test<br>discount removal</div><div class="arrow">→</div><div class="step">Confirm store<br>operations</div><div class="arrow">→</div><div class="step">Then expand</div>
+</div>
+<p>This is the opposite of “raise money → open many cities → hope density eventually fixes the economics.”</p>
+</section>
+
+<section class="section">
+<div class="kicker">10 · Early-warning loop</div>
+<h2>Measure → signal → act</h2>
+<div class="flow">
+<div class="step">Measure<br><small>order contribution</small></div><div class="arrow">→</div><div class="step">Signal<br><small>negative / worsening</small></div><div class="arrow">→</div><div class="step">Review<br><small>city + store + customer</small></div>
+</div>
+<div class="flow">
+<div class="step">Act<br><small>fix, shrink or stop</small></div><div class="arrow">→</div><div class="step">Re-measure<br><small>did economics improve?</small></div><div class="arrow">→</div><div class="step">Decide<br><small>continue or exit</small></div>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">11 · Counterfactual</div>
+<h2>What could management have done differently?</h2>
+<p><strong>These are analysis, not claims about what would definitely have saved PepperTap.</strong></p>
+<div class="grid2">
+<div class="box"><h3>Window 1 — before mass expansion</h3><p>Prove that a grocery order could approach positive contribution without depending on extreme discounts. If not, do not multiply the model across cities.</p></div>
+<div class="box"><h3>Window 2 — after early city failures</h3><p>Turn city closures into a hard expansion rule: no new city until existing markets hit predefined economics and service-quality thresholds.</p></div>
+<div class="box"><h3>Window 3 — when funding sentiment changed</h3><p>Model the business assuming no new funding. That would force the real question: how quickly can the company become cash-generative, and what must be cut if it cannot?</p></div>
+<div class="box"><h3>Window 4 — final decision</h3><p>The pivot to logistics shows management did eventually stop the grocery model. The lesson is to make that decision while the company still has strategic options—not only when the market has already decided.</p></div>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">12 · Could it have been saved?</div>
+<h2>Maybe the business could have been made smaller. That is different from proving the original model would work.</h2>
+<p>The strongest evidence suggests the problem was structural enough that simply adding more customers was not the answer. The founder said the company was losing money on each delivery and saw profitability as distant.</p>
+<div class="callout"><strong>Most plausible rescue:</strong> stop broad expansion, sharply reduce subsidy, concentrate on a few dense micro-markets, fix store integration, and require each retained market to prove improving contribution. Even then, success would not be guaranteed.</div>
+</section>
+
+<section class="section">
+<div class="kicker">13 · Stakeholders</div>
+<h2>Who felt the failure?</h2>
+<div class="grid2">
+<div class="box"><h3>Customers</h3><p>The grocery service disappeared and customers lost the convenience they had adopted.</p></div>
+<div class="box"><h3>Employees</h3><p>Large-scale layoffs followed the shutdown and city pullbacks.</p></div>
+<div class="box"><h3>Partner stores</h3><p>The stores depended on a technology and delivery channel that was being withdrawn.</p></div>
+<div class="box"><h3>Investors</h3><p>More than $50 million of reported venture capital had been committed to the business.</p></div>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">14 · Failure tree</div>
+<h2>The whole story in one picture</h2>
+<div class="chain">
+<div class="node"><strong>PEPPERTAP FAILURE</strong>Fast expansion + weak order economics</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>Demand acquisition</strong>Heavy discounts and promotions</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>Operating burden</strong>Delivery capacity + store integration + service promise</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>Negative contribution</strong>More volume did not reliably create more economic value</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>Scale multiplied the problem</strong>More cities created more complexity and cash requirements</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>Funding becomes a constraint</strong>The model could no longer assume endless external capital</div>
+<div class="arrow">↓</div>
+<div class="node"><strong>Retrenchment → shutdown</strong>City closures → consumer grocery shutdown → logistics pivot</div>
+</div>
+</section>
+
+<section class="section">
+<div class="kicker">15 · Tomorrow Test</div>
+<h2>If you started this business tomorrow…</h2>
+<div class="callout"><p><strong>Before spending heavily on growth, I would want answers to these questions:</strong></p><ol><li>What is our contribution per order after every directly attributable cost?</li><li>How much of demand disappears when discounts are removed?</li><li>How many orders does one delivery resource need to cover its cost?</li><li>How accurate is store inventory data?</li><li>What percentage of orders are cancelled, substituted or delayed because the store data is wrong?</li><li>Does each city become economically healthier as it gets denser?</li><li>If we receive zero new funding for 18 months, what changes immediately?</li><li>What exact threshold makes us stop expanding a city?</li></ol></div>
+</section>
+
+<section class="section">
+<div class="kicker">16 · The lesson</div>
+<h2>Growth can hide a broken engine.</h2>
+<p>PepperTap is useful because the failure was not a story of “nobody wanted the product.” People clearly did use it. The harder lesson is that <strong>a customer can love a service while the business loses money serving that customer.</strong></p>
+<p>The early-warning question is therefore not “Are orders growing?” It is:</p>
+<div class="callout"><strong>“When we add one more customer, one more order, one more store and one more city—does the business become stronger, or does it simply become bigger?”</strong></div>
+</section>
+
+<section class="sources">
+<div class="kicker">17 · Evidence</div>
+<h2>Sources used for this case</h2>
+<ul>
+<li><a href="https://yourstory.com/2016/04/peppertap-shutdown" target="_blank" rel="noopener">YourStory — PepperTap shutdown and reported funding/order figures</a></li>
+<li><a href="https://techcrunch.com/2016/04/25/after-struggling-with-rising-costs-sequoia-backed-peppertap-pivots-from-grocery-deliveries-to-e-commerce-logistics/" target="_blank" rel="noopener">TechCrunch — PepperTap pivot, rising costs and founder post-mortem</a></li>
+<li><a href="https://www.techcircle.in/2016/04/25/why-vc-backed-peppertap-shut-its-hyperlocal-grocery-business" target="_blank" rel="noopener">TechCircle — negative margin, city pullbacks and shutdown</a></li>
+<li><a href="https://www.business-standard.com/article/companies/from-peppertap-to-localbanya-the-grocery-start-up-failures-of-2016-116122700368_1.html" target="_blank" rel="noopener">Business Standard — PepperTap's negative margin per delivery</a></li>
+<li><a href="https://techcrunch.com/2015/09/29/keep-tapping-on-dem-peppers/" target="_blank" rel="noopener">TechCrunch — $36M funding round and expansion plans</a></li>
+<li><a href="https://www.business-standard.com/article/companies/peppertap-raises-seed-funding-from-sequoia-capital-115022500645_1.html" target="_blank" rel="noopener">Business Standard — early funding and company background</a></li>
+<li><a href="https://yourstory.com/2015/05/peppertap" target="_blank" rel="noopener">YourStory — early operations, 600+ daily orders and store-integration challenge</a></li>
+<li><a href="https://www.business-standard.com/article/management/technology-developed-in-house-has-been-our-key-differentiator-milind-sharma-116013100580_1.html" target="_blank" rel="noopener">Business Standard — PepperTap technology and operating model interview</a></li>
+</ul>
+<p><small>Important distinction: this case focuses on the <strong>consumer grocery delivery business that PepperTap shut in April 2016</strong>. Later activity involving related logistics/business entities should not be casually treated as proof that the original grocery model continued.</small></p>
+</section>
+</div>
+</main>
+<footer><div class="wrap">Failure Lab · Case #002 · PepperTap</div></footer>
+</body></html>
