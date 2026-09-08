@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Failure Lab — Case #007: Satyam</title>
+<meta name="description" content="How Satyam's accounting fraud hid a widening gap between reported performance and economic reality.">
+<style>
+:root{--bg:#f7f4ee;--paper:#fffdf8;--ink:#171717;--muted:#68645c;--line:#d9d2c5;--accent:#d85b3f;--blue:#2777d6;--green:#65bd45;--red:#c43c3c;--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.wrap{width:min(1080px,calc(100% - 36px));margin:auto}header{position:sticky;top:0;z-index:10;background:rgba(247,244,238,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav{min-height:68px;display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;letter-spacing:-.04em}.brand span{color:var(--accent)}.navnote{font-size:.82rem;color:var(--muted)}
+.hero{padding:72px 0 46px}.eyebrow,.num{font-size:.76rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-dark,#a83d29)}
+h1{font-size:clamp(3rem,7vw,6rem);line-height:.9;letter-spacing:-.07em;margin:14px 0 24px;max-width:900px}h2{font-size:clamp(1.8rem,4vw,3rem);line-height:1;letter-spacing:-.045em;margin:10px 0 24px}h3{margin:0 0 8px}p{margin:10px 0}.lead{font-size:1.18rem;color:#45413b;max-width:780px}.heroq{border-left:4px solid var(--accent);background:var(--paper);padding:15px 18px;margin-top:24px;max-width:800px;font-weight:750}
+.section{padding:55px 0;border-top:1px solid var(--line)}.grid2,.grid3{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:repeat(3,1fr)}
+.card,.metric,.note,.callout{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.metric .big{font-size:2rem;font-weight:900;letter-spacing:-.05em}.metric p{color:var(--muted);font-size:.9rem}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.gallery figure{margin:0}.gallery img{width:100%;height:210px;object-fit:cover;border-radius:14px;display:block}.gallery figcaption{font-size:.72rem;color:var(--muted);margin-top:6px}
+.flow,.loop,.chain,.truth{display:grid;gap:10px}.flow{grid-template-columns:repeat(5,1fr);align-items:center}.node{padding:16px;background:var(--paper);border:1px solid var(--line);border-radius:14px;text-align:center}.arrow{text-align:center;font-weight:900}
+.chain{max-width:760px;margin:auto}.chain .box{padding:14px 16px;border:1px solid var(--line);background:var(--paper);border-radius:12px;text-align:center}.down{text-align:center;color:var(--muted)}
+.truth{grid-template-columns:repeat(3,1fr)}.truth .card strong{display:block;margin-bottom:5px}
+.alert{border-left:5px solid var(--red);background:#fff4f2;padding:15px 18px;border-radius:12px}.good{border-left:5px solid var(--green);background:#f4fbef;padding:15px 18px;border-radius:12px}
+.scan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.scan .item{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}.scan b{display:block}
+table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.timeline{display:grid;gap:9px}.timeline div{display:grid;grid-template-columns:115px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}.timeline b{color:var(--accent-dark,#a83d29)}
+.footer{padding:45px 0 70px;color:var(--muted);font-size:.85rem}
+a{color:inherit}
+@media(max-width:800px){.grid2,.grid3,.truth,.scan,.flow,.gallery{grid-template-columns:1fr 1fr}.flow .arrow{display:none}.gallery img{height:180px}}
+@media(max-width:560px){.grid2,.grid3,.truth,.scan,.flow,.gallery{grid-template-columns:1fr}.wrap{width:min(100% - 26px,1080px)}.timeline div{grid-template-columns:1fr;gap:3px}h1{font-size:3.2rem}}
+</style>
+</head>
+<body>
+<header><nav class="wrap"><div class="brand">Failure<span>Lab</span></div><div class="navnote">Case #007 · Satyam</div></nav></header>
+<main>
+<section class="hero wrap">
+<div class="eyebrow">Case #007 · Accounting fraud · Governance · Controls</div>
+<h1>When the numbers stop describing the business.</h1>
+<p class="lead">Satyam was a large, respected Indian IT-services company. On paper, it was growing. Behind the reported numbers, cash, revenue and profits had been fabricated for years.</p>
+<div class="heroq">The useful lesson is not simply “fraud is bad.” It is how a company can make its own reporting system stop being an independent check on reality.</div>
+</section>
+
+<section class="section wrap">
+<div class="num">01 · THE BUSINESS</div><h2>What was Satyam?</h2>
+<p class="lead">Satyam Computer Services sold software development, maintenance, consulting and outsourcing services to global customers. It was a legitimate operating business with thousands of employees and major international clients.</p>
+<div class="grid3" style="margin-top:18px">
+<div class="metric"><div class="big">IT services</div><p>Core business</p></div>
+<div class="metric"><div class="big">Hyderabad</div><p>Founded and headquartered in India</p></div>
+<div class="metric"><div class="big">2009</div><p>Fraud became public</p></div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">02 · SEE THE BUSINESS</div><h2>A real company made the false numbers harder to question.</h2>
+<div class="gallery">
+<figure><img src="https://media.newindianexpress.com/TNIE/import/2012/5/15/20/original/Satyambuild.gif?auto=format%2Ccompress&enlarge=true&fit=max&h=900&w=1200" alt="Satyam City Center headquarters, Hyderabad"><figcaption>Satyam headquarters during the 2009 crisis — New Indian Express / Reuters image.</figcaption></figure>
+<figure><img src="https://media.newindianexpress.com/TNIE%2Fimport%2F2012%2F5%2F15%2F22%2Foriginal%2Fsatyam11.jpg?auto=format%2Ccompress&fit=max&w=480" alt="Satyam employees outside Hyderabad office"><figcaption>Employees outside a Satyam office — Reuters image via New Indian Express.</figcaption></figure>
+<figure><img src="https://media.newindianexpress.com/TNIE/import/2012/5/15/20/original/Satyambuild.gif?auto=format%2Ccompress&enlarge=true&fit=max&h=900&w=1200" alt="Satyam chairman at 2008 results announcement"><figcaption>Ramalinga Raju at a Satyam press conference — Fortune / Reuters image.</figcaption></figure>
+<figure><img src="https://media.assettype.com/thequint%2F2015-04%2Fdc9f189f-d727-4b31-a678-d5cc65a946e5%2FRamalinga-Raju_reuters.jpg" alt="Satyam headquarters after the scandal"><figcaption>Ramalinga Raju escorted by police — The Quint / Reuters image.</figcaption></figure>
+</div>
+<p class="note" style="margin-top:12px">These historical photographs provide context; they are not evidence for the numerical claims below.</p>
+</section>
+
+<section class="section wrap">
+<div class="num">03 · BUSINESS MODEL FLOW</div><h2>The underlying operating loop was ordinary.</h2>
+<div class="flow">
+<div class="node"><b>Client</b><br>contracts work</div><div class="arrow">→</div>
+<div class="node"><b>Satyam</b><br>staffs delivery teams</div><div class="arrow">→</div>
+<div class="node"><b>Work</b><br>is delivered</div><div class="arrow">→</div>
+<div class="node"><b>Invoice</b><br>client is billed</div><div class="arrow">→</div>
+<div class="node"><b>Cash</b><br>is collected</div>
+</div>
+<p style="margin-top:18px">The fraud attacked the measurement layer around this loop. Reported revenue, receivables, cash and profit increasingly diverged from what the operating business was actually generating.</p>
+</section>
+
+<section class="section wrap">
+<div class="num">04 · THE WARNING BEFORE THE REVEAL</div><h2>The Maytas episode was a major governance signal.</h2>
+<div class="grid2">
+<div class="card"><h3>December 2008</h3><p>Satyam proposed acquiring Maytas Properties and Maytas Infra, businesses promoted by members of the founder's family. The proposal triggered strong investor opposition and was withdrawn.</p></div>
+<div class="card"><h3>Why it matters</h3><p>The transaction was not itself proof of the accounting fraud. But it created a governance question: why was a listed IT company proposing a related-party transaction of this scale, and who could independently challenge it?</p></div>
+</div>
+<div class="alert" style="margin-top:14px"><b>Failure Lab distinction:</b> Maytas was a warning about governance and capital allocation. The accounting fraud was separately established by subsequent investigations.</div>
+</section>
+
+<section class="section wrap">
+<div class="num">05 · THE DISCLOSURE</div><h2>January 7, 2009 changed the meaning of the balance sheet.</h2>
+<p>Ramalinga Raju's letter disclosed that the September 30, 2008 balance sheet contained fictitious cash and bank balances of about ₹5,040 crore, understated liabilities of about ₹1,230 crore, and overstated debtors of about ₹490 crore. He also said reported Q2 revenue of ₹2,700 crore should have been about ₹2,112 crore, while reported operating margin of ₹649 crore should have been about ₹61 crore. citeturn1search2</p>
+<div class="grid3" style="margin-top:18px">
+<div class="metric"><div class="big">₹5,040 Cr</div><p>Non-existent cash/bank balance disclosed</p></div>
+<div class="metric"><div class="big">₹1,230 Cr</div><p>Understated liability</p></div>
+<div class="metric"><div class="big">₹588 Cr</div><p>Q2 revenue overstatement in Raju's disclosure</p></div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">06 · WHAT WAS ACTUALLY HAPPENING</div><h2>The gap had become a system.</h2>
+<div class="truth">
+<div class="card"><strong>Reported</strong><p>Revenue and operating profit were presented as steadily strong.</p></div>
+<div class="card"><strong>Underlying</strong><p>The company had a real IT-services business, but reported figures included fictitious revenue, cash, interest and receivables.</p></div>
+<div class="card"><strong>Control failure</strong><p>Multiple accounting systems and weak independent verification allowed false entries to survive across periods.</p></div>
+</div>
+<p style="margin-top:16px">Satyam's later forensic investigation described a complex reporting environment with multiple non-integrated financial systems. It found fictitious entries and unrecorded transactions affecting revenue, cash, bank balances, receivables and other accounts. citeturn1search62</p>
+</section>
+
+<section class="section wrap">
+<div class="num">07 · THE 10-MINUTE FAILURE SCAN</div><h2>What should an owner, board or investor check?</h2>
+<div class="scan">
+<div class="item"><b>Economics</b>Do reported margins reconcile with delivery capacity and real costs?</div>
+<div class="item"><b>Cash</b>Can reported cash be independently confirmed at the bank?</div>
+<div class="item"><b>Receivables</b>Do large customer balances reconcile to external confirmations and collections?</div>
+<div class="item"><b>Obligations</b>Do liabilities, debt and related-party movements reconcile?</div>
+<div class="item"><b>Operations</b>Do headcount, projects and customers support the reported revenue?</div>
+<div class="item"><b>Management</b>Are executives making unusual transactions that protect the reported story?</div>
+<div class="item"><b>Controls</b>Can anyone senior to the operating team independently challenge the numbers?</div>
+<div class="item"><b>Decision</b>What happens if one critical reported balance cannot be verified?</div>
+</div>
+<div class="good" style="margin-top:16px"><b>Control principle:</b> the most important numbers should not depend entirely on the same people who benefit from those numbers looking good.</div>
+</section>
+
+<section class="section wrap">
+<div class="num">08 · FAILURE CHAIN</div><h2>How the reporting problem became a corporate crisis.</h2>
+<div class="chain">
+<div class="box">Pressure to maintain reported growth and profitability</div><div class="down">↓</div>
+<div class="box">Fictitious revenue and income entries</div><div class="down">↓</div>
+<div class="box">Fictitious cash and receivables make the balance sheet support the story</div><div class="down">↓</div>
+<div class="box">The gap grows as real performance cannot catch up</div><div class="down">↓</div>
+<div class="box">Large strategic transactions increase the need to preserve credibility</div><div class="down">↓</div>
+<div class="box">Independent checks fail to break the loop</div><div class="down">↓</div>
+<div class="box">Disclosure exposes a large mismatch between reported and economic reality</div>
+</div>
+<p class="note" style="margin-top:16px"><b>Root-cause discipline:</b> the fraud itself was deliberate misconduct by individuals. The organisational lesson is broader: governance and verification systems failed to stop, detect or surface the manipulation earlier.</p>
+</section>
+
+<section class="section wrap">
+<div class="num">09 · TIMELINE</div><h2>The crisis did not begin on January 7.</h2>
+<div class="timeline">
+<div><b>2001–2008</b><span>SEBI findings later described insiders selling substantial Satyam holdings while the market was receiving increasingly positive reported financial information. citeturn1search59</span></div>
+<div><b>Feb 2008</b><span>World Bank temporarily suspended Satyam from direct contracts; in September 2008 it made the company ineligible for eight years over improper benefits and documentation issues. citeturn1search4</span></div>
+<div><b>Dec 16, 2008</b><span>Maytas acquisition proposal announced and then abandoned after investor reaction.</span></div>
+<div><b>Jan 7, 2009</b><span>Raju resigns and discloses the accounting irregularities. SEBI begins investigation immediately. citeturn1search14</span></div>
+<div><b>Jan 2009</b><span>Government replaces the board and works to keep the operating company functioning. citeturn1search0</span></div>
+<div><b>Apr 2009</b><span>CBI files a large chargesheet against key accused, including former senior executives and auditors. citeturn2search11</span></div>
+<div><b>2013</b><span>Mahindra Satyam ultimately merges with Tech Mahindra; the Satyam brand disappears as an independent company.</span></div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">10 · WARNING SIGNALS</div><h2>Signals are useful only when someone owns the response.</h2>
+<table>
+<thead><tr><th>Signal</th><th>Question</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td>Cash materially exceeds independently verifiable bank balances</td><td>Can every major cash balance be confirmed directly?</td><td>Independent confirmation; escalate immediately if confirmation fails.</td></tr>
+<tr><td>Receivables grow faster than collections</td><td>Are reported customers actually paying?</td><td>Age balances and confirm major accounts externally.</td></tr>
+<tr><td>Related-party deal with weak strategic logic</td><td>Who benefits if the deal happens?</td><td>Independent committee review and conflict disclosure.</td></tr>
+<tr><td>Management certifications become a formality</td><td>Can directors challenge the numbers without relying on management's summary?</td><td>Require direct access to underlying evidence.</td></tr>
+<tr><td>One person controls too much of the information chain</td><td>Who can independently reconstruct the number?</td><td>Segregate preparation, verification and approval.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="section wrap">
+<div class="num">11 · DECISION GATES</div><h2>Build controls around the numbers that can kill the business.</h2>
+<div class="grid2">
+<div class="card"><h3>Cash gate</h3><p><b>Rule:</b> independently verify material cash balances every reporting period.</p><p><b>Fail:</b> unexplained mismatch → no sign-off until resolved.</p></div>
+<div class="card"><h3>Revenue gate</h3><p><b>Rule:</b> reconcile major revenue streams to contracts, delivery evidence and collections.</p><p><b>Fail:</b> unexplained revenue → investigate before reporting.</p></div>
+<div class="card"><h3>Related-party gate</h3><p><b>Rule:</b> material related-party transactions require genuinely independent review.</p><p><b>Fail:</b> conflict or unclear value → stop the transaction.</p></div>
+<div class="card"><h3>Board-information gate</h3><p><b>Rule:</b> directors receive raw evidence, not only management-selected summaries.</p><p><b>Fail:</b> restricted access → treat the control environment as impaired.</p></div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">12 · COULD IT HAVE BEEN STOPPED?</div><h2>The counterfactual is about controls, not certainty.</h2>
+<p>This is Failure Lab analysis, not a claim that one control would definitely have prevented the fraud.</p>
+<div class="grid3">
+<div class="card"><h3>Before the gap became huge</h3><p>Independent cash confirmations and customer receivable confirmations could have tested whether reported assets existed.</p></div>
+<div class="card"><h3>Before Maytas</h3><p>A truly independent board process could have treated the related-party proposal as a governance stress test rather than only a transaction.</p></div>
+<div class="card"><h3>Before disclosure</h3><p>Segregated financial systems, direct audit access and stronger challenge rights could have increased the probability of earlier detection.</p></div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">13 · WHO SHOULD HAVE ACTED?</div><h2>Controls fail when responsibility becomes everyone’s job and nobody’s job.</h2>
+<div class="grid3">
+<div class="card"><h3>Management</h3><p>Provide truthful records and allow independent verification.</p></div>
+<div class="card"><h3>Board</h3><p>Challenge unusual transactions and demand evidence independent of management.</p></div>
+<div class="card"><h3>Auditors</h3><p>Test existence and completeness of material balances rather than relying excessively on representations.</p></div>
+<div class="card"><h3>Audit committee</h3><p>Escalate unexplained inconsistencies and conflicts.</p></div>
+<div class="card"><h3>Regulators</h3><p>Investigate credible market and disclosure anomalies and enforce consequences.</p></div>
+<div class="card"><h3>Investors</h3><p>Ask whether reported cash, margins and growth are supported by independently observable evidence.</p></div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">14 · CURRENT STATUS</div><h2>Satyam survived as an operating business, but not as an independent company.</h2>
+<p>The post-scandal company was restructured and became Mahindra Satyam. It was later merged with Tech Mahindra in 2013. So the correct lesson is not “Satyam disappeared overnight.” The operating business was rescued and absorbed, while the original governance and corporate identity did not survive.</p>
+<div class="callout"><b>Why this matters:</b> crisis resolution and business survival are different questions. A company can survive operationally while the original institution, leadership and ownership structure are dismantled.</div>
+</section>
+
+<section class="section wrap">
+<div class="num">15 · FINAL FAILURE TREE</div><h2>One failure pattern, compressed.</h2>
+<div class="chain">
+<div class="box"><b>Primary misconduct:</b> financial statements were deliberately falsified.</div>
+<div class="down">↓</div>
+<div class="box"><b>Enabling conditions:</b> weak independent verification, information asymmetry and governance conflicts.</div>
+<div class="down">↓</div>
+<div class="box"><b>Reinforcing mechanism:</b> each period's reported success increased the pressure to preserve the story.</div>
+<div class="down">↓</div>
+<div class="box"><b>Terminal event:</b> disclosure destroyed confidence in the reported numbers.</div>
+<div class="down">↓</div>
+<div class="box"><b>Outcome:</b> government intervention, restructuring, legal/regulatory action and eventual merger.</div>
+</div>
+</section>
+
+<section class="section wrap">
+<div class="num">16 · TOMORROW TEST</div><h2>If you were starting this business tomorrow, what would you check so you don't repeat this mistake?</h2>
+<div class="grid2">
+<div class="card"><h3>1. Can the number be independently verified?</h3><p>For every material cash, receivable and revenue balance, identify the evidence outside the person who prepared the number.</p></div>
+<div class="card"><h3>2. Who can say “no”?</h3><p>Name the independent person or committee with authority to stop a transaction or reject management's numbers.</p></div>
+<div class="card"><h3>3. What happens when evidence disagrees?</h3><p>Write the escalation rule before a crisis: mismatch → investigation → freeze sign-off → board escalation.</p></div>
+<div class="card"><h3>4. Does growth survive a reality check?</h3><p>Compare reported revenue and margin with collections, customer confirmations, delivery evidence, staffing and cash movement.</p></div>
+</div>
+<div class="good" style="margin-top:16px"><b>The practical lesson:</b> don't ask only “Do the numbers look good?” Ask “What independent evidence would prove these numbers are real?”</div>
+</section>
+
+<section class="section wrap">
+<div class="num">17 · EVIDENCE & SOURCES</div><h2>What is fact, and what is Failure Lab analysis?</h2>
+<div class="truth">
+<div class="card"><strong>Verified / regulatory</strong><p>SEC and SEBI records document the scale and mechanisms of the financial-statement fraud and regulatory findings. citeturn1search0turn1search9</p></div>
+<div class="card"><strong>Primary company evidence</strong><p>The 2009 company filing describes the forensic investigation and the accounting irregularities found across revenue, cash, receivables and other accounts. citeturn1search62</p></div>
+<div class="card"><strong>Failure Lab analysis</strong><p>The control tests, decision gates and counterfactual intervention points are analytical tools derived from the documented events. They are not claims that a particular intervention certainly would have saved the company.</p></div>
+</div>
+<ul style="margin-top:18px">
+<li><a href="https://www.sec.gov/news/press/2011/2011-81.htm">U.S. SEC — Satyam financial fraud enforcement action</a></li>
+<li><a href="https://www.sebi.gov.in/sebi_data/docfiles/28591_t.html">SEBI — 2014 order in the Satyam matter</a></li>
+<li><a href="https://www.bseindia.com/HIS_ANN_RPT/HISTANNR/2009/SATYAM_COMPUTER_SERVICES_LTD-500376-MARCH-2009.PDF">Satyam 2008–09 annual report / forensic findings</a></li>
+<li><a href="https://indiankanoon.org/doc/49455743/">Judicial record reproducing Raju's January 7, 2009 disclosure</a></li>
+<li><a href="https://economictimes.indiatimes.com/tech/software/satyam-ineligible-to-receive-direct-contracts-world-bank/articleshow/3879518.cms">Economic Times — World Bank action in 2008</a></li>
+<li><a href="https://indianexpress.com/article/news-archive/print/the-clout-of-ramalinga-raju/">Indian Express — contemporary background on Raju and Satyam</a></li>
+</ul>
+</section>
+</main>
+<footer class="footer wrap">Failure Lab · Case #007 · Study failure → understand the mechanism → identify warning signs → define controls → decide before the crisis decides for you.</footer>
+</body>
+</html>
